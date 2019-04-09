@@ -1,6 +1,5 @@
 package me.niveau3.services;
 
-import lombok.Getter;
 import me.niveau3.services.mark.MarkService;
 import service.api.IProgram;
 import service.api.IStopable;
@@ -18,9 +17,9 @@ public class MainService implements IProgram, IStopable {
     @Override
     public void execute() {
         System.out.println("Wählen sie eine Option aus:");
-        System.out.println("[1] Bankkonto verwalten.");
-        System.out.println("[2] Markt öffnen.");
-        System.out.println("[stop] Programm beenden.");
+        System.out.println("[1] Bankkonto verwalten");
+        System.out.println("[2] Markt öffnen");
+        System.out.println("[stop] Programm beenden");
 
         String input = getScanner().next("Bitte geben sie eine Valide Option an!","1", "2");
 

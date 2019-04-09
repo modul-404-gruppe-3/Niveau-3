@@ -5,12 +5,13 @@ import service.api.IProgram;
 import service.api.IStopable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProductService implements IProgram, IStopable {
 
     private MarkService markService;
-    private List<Product> products;
+    private HashMap<Integer, Product> products;
 
 
     public ProductService(MarkService markService) {
@@ -20,8 +21,8 @@ public class ProductService implements IProgram, IStopable {
 
     @Override
     public void execute() {
-        for (Product product : products) {
-            System.out.println("[ " + product.getId()+ " ]\t " + product.getName() + ", " + product.getPrice() + " CHF");
+        for (Product product : products.values()) {
+            System.out.println("[" + product.getId()+ "] " + product.getName() + ", " + product.getPrice() + " CHF");
         }
 
         System.out.println("Geben sie eine Aktion an:");
@@ -37,21 +38,40 @@ public class ProductService implements IProgram, IStopable {
         }
 
         if (input.equalsIgnoreCase("1")) {
-            //todo implement add item to cart
+            System.out.println("Geben sie die Id des Objektes an das sie zum Warenkorb hinzufügen wollen.");
+
+            System.out.println(String.join(" ", products.keySet().stream()
+                    .map(integer -> "" + integer)
+                    .toArray(String[]::new)));
+
+            Integer prodictId = getScanner().nextInteger("Bitte geben sie eine Gütlige Produkt Id ein.",
+                    products.keySet().stream()
+                    .map(integer -> "" + integer)
+                    .toArray(String[]::new));
+
+            System.out.println("Geben Sie die gewünschte Anzahl an:");
+
+            Integer amount = getScanner().nextInteger("Bitte geben sie eine Valide Zahl grösser als 0 an.", integer -> integer > 0);
+
+
+            Product product = products.get(prodictId);
+            markService.getShoppingCartService().getCart().addItem(amount, product);
+
+            System.out.println(product.getName() + " wurde " + amount + " mal hinzugefügt.");
         }else {
             System.out.println("invalid user input!");
         }
     }
 
     public void loadProducts() {
-        products = new ArrayList<>();
-        products.add(new Product(1, 10,"p1"));
-        products.add(new Product(2, 20,"p2"));
-        products.add(new Product(3, 15,"p3"));
-        products.add(new Product(4, 12,"p4"));
-        products.add(new Product(5, 1,"p5"));
-        products.add(new Product(6, 5,"p6"));
-        products.add(new Product(7, 5, "p7"));
+        products = new HashMap<>();
+        products.put(1, new Product(1, 10,"p1"));
+        products.put(2, new Product(2, 20,"p2"));
+        products.put(3, new Product(3, 15,"p3"));
+        products.put(4, new Product(4, 12,"p4"));
+        products.put(5, new Product(5, 1,"p5"));
+        products.put(6, new Product(6, 5,"p6"));
+        products.put(7, new Product(7, 5, "p7"));
     }
 
 
