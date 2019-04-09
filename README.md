@@ -14,7 +14,7 @@
   - Abheben
   - Hinzufügen
   - Bezahlen
-## 3.	Aufgabe – Bezahlmöglichkeiten¨
+## 3.	Aufgabe – Bezahlmöglichkeiten
 - Kontozahlung (Nach Verifikation wird direkt vom Konto abgezogen)
 - Rechnung (bis zu 5 Bestellungen auf Rechnung summierbar)
 
