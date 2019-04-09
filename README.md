@@ -3,6 +3,8 @@
 
 ## 1. Aufgabe – Bestellsystem
 - Unterschiedliche Waren bestellbar aus Katalog
+- Items sollen in einem einzelnen Warenkorb sein
+- Man soll angeben können, wie viel man von jedem Artikel haben will
 - Mehrere Artikel auf einmal bestellbar
 - Summe einer Bestellung wird berechnet
 - Mehrere Bezahlmöglichkeiten (Kontozahlung, Barzahlung, Rechnung)
