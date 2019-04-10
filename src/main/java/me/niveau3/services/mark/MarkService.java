@@ -22,6 +22,7 @@ public class MarkService implements IProgram, IStopable {
         String input = getScanner().next("Bitte gebe eine Valide aktion an!", "1", "2");
 
         if (input == null) {
+            System.out.println("Kehre zum Hauptmenü zurück");
             return;
         }
 

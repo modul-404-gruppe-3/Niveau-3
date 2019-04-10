@@ -26,10 +26,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.6</version>
         </dependency>
+
         <dependency>
             <groupId>service.api</groupId>
             <artifactId>service-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

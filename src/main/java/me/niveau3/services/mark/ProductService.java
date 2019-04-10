@@ -4,9 +4,7 @@ import me.niveau3.objects.Product;
 import service.api.IProgram;
 import service.api.IStopable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ProductService implements IProgram, IStopable {
 
@@ -27,13 +25,13 @@ public class ProductService implements IProgram, IStopable {
 
         System.out.println("Geben sie eine Aktion an:");
         System.out.println("[1] Produkt zum Warenkorb hinzufügen");
-        System.out.println("[stop] Produkt Liste verlassen.");
+        System.out.println("[stop] Produkt Liste verlassen");
 
 
         String input = getScanner().next("Bitte gebe eine Valide Aktion ein.", "1");
 
         if (input == null) {
-            System.out.println("Warenkorb verlassen.");
+            System.out.println("Produktliste verlassen.");
             return;
         }
 

@@ -1,5 +1,6 @@
 package me.niveau3.services;
 
+import me.niveau3.services.bank.BankService;
 import me.niveau3.services.mark.MarkService;
 import service.api.IProgram;
 import service.api.IStopable;
@@ -7,11 +8,13 @@ import service.api.IStopable;
 public class MainService implements IProgram, IStopable {
 
     private MarkService markService;
+    private BankService bankService;
     private boolean stop;
 
     public MainService() {
         stop = false;
         this.markService = new MarkService();
+        this.bankService = new BankService();
     }
 
     @Override
@@ -31,7 +34,7 @@ public class MainService implements IProgram, IStopable {
 
         switch (input) {
             case "1":
-
+                this.bankService.execute();
                 break;
             case "2":
                 this.markService.execute();
