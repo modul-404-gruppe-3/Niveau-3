@@ -1,6 +1,8 @@
 package me.niveau3.services.mark;
 
+import lombok.Getter;
 import me.niveau3.objects.Product;
+import me.niveau3.services.MainService;
 import service.api.IProgram;
 import service.api.IStopable;
 
@@ -8,12 +10,13 @@ import java.util.HashMap;
 
 public class ProductService implements IProgram, IStopable {
 
-    private MarkService markService;
+    @Getter
+    private MainService mainService;
     private HashMap<Integer, Product> products;
 
 
-    public ProductService(MarkService markService) {
-        this.markService = markService;
+    public ProductService(MainService mainService) {
+        this.mainService = mainService;
         loadProducts();
     }
 
@@ -53,7 +56,7 @@ public class ProductService implements IProgram, IStopable {
 
 
             Product product = products.get(prodictId);
-            markService.getShoppingCartService().getCart().addItem(amount, product);
+            mainService.getShoppingCartService().getCart().addItem(amount, product);
 
             System.out.println(product.getName() + " wurde " + amount + " mal hinzugefügt.");
         }else {

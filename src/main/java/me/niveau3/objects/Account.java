@@ -1,4 +1,4 @@
-package me.niveau3.services.bank;
+package me.niveau3.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

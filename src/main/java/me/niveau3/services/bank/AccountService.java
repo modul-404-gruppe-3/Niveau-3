@@ -1,6 +1,9 @@
 package me.niveau3.services.bank;
 
 import lombok.Getter;
+import me.niveau3.objects.Account;
+import me.niveau3.objects.AccountManager;
+import me.niveau3.services.MainService;
 import me.niveau3.util.Hasher;
 import service.api.IProgram;
 import service.api.IStopable;
@@ -12,13 +15,15 @@ import service.api.IStopable;
  * This Service is not designed to be able to work Concurrent, it can handle multiple accounts but it can not really
  * handle multiple Users at once.
  */
+@Getter
 public class AccountService implements IStopable, IProgram {
-    @Getter
     boolean stop = false;
-    private AccountManager manager;
+    private AccountManager accountManager;
+    private MainService mainService;
 
-    public AccountService(AccountManager manager) {
-        this.manager = manager;
+    public AccountService(MainService mainService) {
+        this.mainService = mainService;
+        this.accountManager = new AccountManager();
     }
 
     /**
@@ -28,7 +33,7 @@ public class AccountService implements IStopable, IProgram {
      */
     @Override
     public void execute() {
-        if (manager.getAccountCount() < 1) {
+        if (accountManager.getAccountCount() < 1) {
             handleAccountCreation();
             return;
         }
@@ -53,7 +58,7 @@ public class AccountService implements IStopable, IProgram {
                 break;
             case "3":
                 System.out.println("Alle Accounts:");
-                for (String s : manager.getAccountNames()) {
+                for (String s : accountManager.getAccountNames()) {
                     System.out.println(s);
                 }
                 break;
@@ -73,7 +78,7 @@ public class AccountService implements IStopable, IProgram {
             return;
         }
 
-        if (manager.exists(name)) {
+        if (accountManager.exists(name)) {
             System.out.println("Dieser Account existiert bereits, Account erstellen abgebrochen.");
             return;
         }
@@ -93,7 +98,7 @@ public class AccountService implements IStopable, IProgram {
             return;
         }
 
-        manager.addAccount(new Account(startKapital, name), passwordhash);
+        accountManager.addAccount(new Account(startKapital, name), passwordhash);
         System.out.println("Account mit dem Namen " + name + " wurde erstellt!");
     }
 
@@ -104,7 +109,7 @@ public class AccountService implements IStopable, IProgram {
     private void handleAccountOperations() {
         System.out.println("geben sie einen Accountnamen ein:");
 
-        String[] allAccountNames = manager.getAccountNames().toArray(new String[0]);
+        String[] allAccountNames = accountManager.getAccountNames().toArray(new String[0]);
         System.out.println(String.join(" ", allAccountNames));
         String accountName = getScanner().next("Dieser Account existiert nicht, versuchen sie es erneut!", allAccountNames);
 
@@ -123,16 +128,16 @@ public class AccountService implements IStopable, IProgram {
 
             String password = Hasher.getMd5(next);
             System.out.println("pw hash: " + password);
-            if (manager.canLogin(accountName, password)) {
+            if (accountManager.canLogin(accountName, password)) {
                 break;
             }else {
                 System.out.println("Anmeldung fehlgeschlagen");
             }
         }
 
-        Account account = manager.getAccount(accountName);
+        Account account = accountManager.getAccount(accountName);
 
-        allAccountNames = manager.getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
+        allAccountNames = accountManager.getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
 
 
         System.out.println("bitte gebe ein, was du machen willst:");
@@ -140,6 +145,8 @@ public class AccountService implements IStopable, IProgram {
         System.out.println("2 - Hinzufügen");
         System.out.println("3 - Bilanz anzeigen");
         System.out.println("4 - Geld überweisen");
+        System.out.println("5 - Rechnung begleichen");
+
         String input = getScanner().next("Invalider Input, versuchen sie es erneut!", "1", "2", "3", "4", "5");
 
         if (input == null) {
@@ -168,7 +175,7 @@ public class AccountService implements IStopable, IProgram {
                     return;
                 }
 
-                Account targetAccount = manager.getAccount(targetAccountName);
+                Account targetAccount = accountManager.getAccount(targetAccountName);
                 System.out.println("geben sie bitte jetzt an, wie viel sie überweisen wollen.");
                 Double amount = getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0 && account.getBilanz() - aDouble > 0);
 
@@ -180,6 +187,10 @@ public class AccountService implements IStopable, IProgram {
 
                 account.transfer(targetAccount, amount);
                 System.out.println("Du hast " + targetAccountName + " " + amount + " überwiesen.");
+                break;
+            case "5":
+
+
                 break;
         }
     }

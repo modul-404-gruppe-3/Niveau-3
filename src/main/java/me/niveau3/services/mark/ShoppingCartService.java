@@ -1,8 +1,9 @@
 package me.niveau3.services.mark;
 
 import lombok.Getter;
-import me.niveau3.objects.Product;
+import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.objects.ShoppingCart;
+import me.niveau3.services.MainService;
 import service.api.IProgram;
 import service.api.IStopable;
 
@@ -10,10 +11,12 @@ public class ShoppingCartService implements IStopable, IProgram {
 
     @Getter
     private ShoppingCart cart;
+    private MainService mainService;
 
-    public ShoppingCartService() {
+    public ShoppingCartService(MainService mainService) {
+        this.mainService = mainService;
         cart = new ShoppingCart();
-        cart.addItem(5, new Product(1, 10, "baum"));
+
     }
 
     @Override
@@ -38,7 +41,7 @@ public class ShoppingCartService implements IStopable, IProgram {
         System.out.println("[2] Check out (Bezahlen)");
         System.out.println("[stop] Warenkorb verlassen");
 
-        String input = getScanner().next("Bitte gebe eine Valide Aktion ein.", "1");
+        String input = getScanner().next("Bitte gebe eine Valide Aktion ein.", "1", "2");
 
         if (input == null) {
             System.out.println("Warenkorb verlassen.");
@@ -54,6 +57,19 @@ public class ShoppingCartService implements IStopable, IProgram {
 
             var item = cart.removeItem(id);
             System.out.println(item.getProduct().getName() + " wurde aus der Listen entfernt.");
+        }else if (input.equalsIgnoreCase("2")) {
+            System.out.println("Gib eine der Folgenden Zahlungsmethoden an:");
+            for (String indexesAsString : mainService.getPaymentMethodManager().getIndexesAsStrings()) {
+                System.out.println("[" + indexesAsString + "] " + mainService.getPaymentMethodManager().get(indexesAsString).getDisplayName());
+            }
+
+            String m = getScanner().next("Bitte geben sie eine Valide Zahlungsart an.", mainService.getPaymentMethodManager().getIndexesAsStrings().toArray(new String[0]));
+
+            AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(m);
+
+            method.execute();
+
+            System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ")");
         } else {
             System.out.println("invalid user input!");
         }

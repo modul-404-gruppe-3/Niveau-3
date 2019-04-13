@@ -1,16 +1,15 @@
 package me.niveau3.services.mark;
 
 import lombok.Getter;
+import me.niveau3.services.MainService;
 import service.api.IProgram;
 import service.api.IStopable;
 @Getter
 public class MarkService implements IProgram, IStopable {
-    private ShoppingCartService shoppingCartService;
-    private ProductService productService;
+    private MainService mainService;
 
-    public MarkService() {
-        this.shoppingCartService = new ShoppingCartService();
-        this.productService = new ProductService(this);
+    public MarkService(MainService mainService) {
+        this.mainService = mainService;
     }
 
     @Override
@@ -28,10 +27,10 @@ public class MarkService implements IProgram, IStopable {
 
         switch (input) {
             case "1":
-                this.productService.execute();
+                this.mainService.getProductService().execute();
                 break;
             case "2":
-                this.shoppingCartService.execute();
+                this.mainService.getShoppingCartService().execute();
                 break;
             default:
                 System.out.println("invalid user input!");

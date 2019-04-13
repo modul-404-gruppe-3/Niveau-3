@@ -1,6 +1,4 @@
-package me.niveau3.services.bank;
-
-import me.niveau3.util.Hasher;
+package me.niveau3.objects;
 
 import java.util.HashMap;
 import java.util.Set;
