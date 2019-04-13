@@ -1,12 +1,13 @@
 package me.niveau3.payment_method;
 
 import me.niveau3.api.AbstractPaymentMethod;
-import me.niveau3.objects.ShoppingCart;
+import me.niveau3.services.MainService;
+import service.api.InternalScanner;
 
 public class CreditCard extends AbstractPaymentMethod {
 
-    public CreditCard(ShoppingCart cart) {
-        super(cart);
+    public CreditCard(MainService mainService) {
+        super(mainService);
     }
 
     @Override
@@ -15,7 +16,12 @@ public class CreditCard extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute() {
+    public void execute(InternalScanner scanner) {
+        final double amount = getCart().getItems()
+                .values().stream()
+                .mapToDouble(i -> i.getProduct().getPrice() * i.getAmount())
+                .sum();
 
+        PaymentUtils.payItems(getMainService(), scanner, amount);
     }
 }

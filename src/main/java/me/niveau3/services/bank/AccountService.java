@@ -3,6 +3,7 @@ package me.niveau3.services.bank;
 import lombok.Getter;
 import me.niveau3.objects.Account;
 import me.niveau3.objects.AccountManager;
+import me.niveau3.payment_method.OnAccount;
 import me.niveau3.services.MainService;
 import me.niveau3.util.Hasher;
 import service.api.IProgram;
@@ -110,7 +111,6 @@ public class AccountService implements IStopable, IProgram {
         System.out.println("geben sie einen Accountnamen ein:");
 
         String[] allAccountNames = accountManager.getAccountNames().toArray(new String[0]);
-        System.out.println(String.join(" ", allAccountNames));
         String accountName = getScanner().next("Dieser Account existiert nicht, versuchen sie es erneut!", allAccountNames);
 
         if (accountName == null) {
@@ -138,7 +138,6 @@ public class AccountService implements IStopable, IProgram {
         Account account = accountManager.getAccount(accountName);
 
         allAccountNames = accountManager.getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
-
 
         System.out.println("bitte gebe ein, was du machen willst:");
         System.out.println("1 - Abheben");
@@ -189,8 +188,7 @@ public class AccountService implements IStopable, IProgram {
                 System.out.println("Du hast " + targetAccountName + " " + amount + " überwiesen.");
                 break;
             case "5":
-
-
+                OnAccount.getAccount().pay(getScanner());
                 break;
         }
     }

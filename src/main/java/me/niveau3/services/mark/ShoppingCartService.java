@@ -3,6 +3,7 @@ package me.niveau3.services.mark;
 import lombok.Getter;
 import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.objects.ShoppingCart;
+import me.niveau3.payment_method.OnAccount;
 import me.niveau3.services.MainService;
 import service.api.IProgram;
 import service.api.IStopable;
@@ -67,9 +68,14 @@ public class ShoppingCartService implements IStopable, IProgram {
 
             AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(m);
 
-            method.execute();
+            method.execute(getScanner());
 
-            System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ")");
+
+            if (!(method instanceof OnAccount)) {
+                System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ")");
+            }else {
+                System.out.println("Bestellung auf rechnung hinzugefügt.");
+            }
         } else {
             System.out.println("invalid user input!");
         }
