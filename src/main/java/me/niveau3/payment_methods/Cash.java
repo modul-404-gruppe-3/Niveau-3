@@ -1,8 +1,8 @@
-package me.niveau3.payment_method;
+package me.niveau3.payment_methods;
 
 import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.services.MainService;
-import service.api.InternalScanner;
+import service.api.IScanner;
 
 public class Cash extends AbstractPaymentMethod {
     public Cash(MainService mainService) {
@@ -15,7 +15,7 @@ public class Cash extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute(InternalScanner scanner) {
+    public void execute(IScanner scanner) {
         getMainService().getShoppingCartService().getCart().clear();
     }
 }

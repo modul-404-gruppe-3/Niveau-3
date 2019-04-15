@@ -8,28 +8,35 @@ import me.niveau3.objects.PaymentMethodManager;
 import me.niveau3.services.mark.MarkService;
 import me.niveau3.services.mark.ProductService;
 import me.niveau3.services.mark.ShoppingCartService;
-import service.api.IProgram;
+import service.api.AbstractProgram;
 import service.api.IStopable;
 
 @Getter
-public class MainService implements IProgram, IStopable {
+public class MainService extends AbstractProgram implements IStopable {
     private MarkService markService;
     private BankService bankService;
     private PaymentMethodManager paymentMethodManager;
     private ShoppingCartService shoppingCartService;
     private ProductService productService;
     private boolean stop;
-    AccountManager accountManager;
-    AccountService accountService;
+    private AccountManager accountManager;
+    private AccountService accountService;
 
     public MainService() {
-        stop = false;
+        this.stop = false;
         this.markService = new MarkService(this);
         this.bankService = new BankService(this);
         this.accountService = new AccountService(this);
+        this.accountManager = new AccountManager();
         this.shoppingCartService = new ShoppingCartService(this);
         this.productService = new ProductService(this);
         this.paymentMethodManager = new PaymentMethodManager();
+    }
+
+    public void run() {
+        while (!this.isStop()) {
+            this.execute();
+        }
     }
 
     @Override

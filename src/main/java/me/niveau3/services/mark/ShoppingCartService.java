@@ -3,12 +3,12 @@ package me.niveau3.services.mark;
 import lombok.Getter;
 import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.objects.ShoppingCart;
-import me.niveau3.payment_method.OnAccount;
+import me.niveau3.payment_methods.OnAccount;
 import me.niveau3.services.MainService;
-import service.api.IProgram;
+import service.api.AbstractProgram;
 import service.api.IStopable;
 
-public class ShoppingCartService implements IStopable, IProgram {
+public class ShoppingCartService extends AbstractProgram implements IStopable {
 
     @Getter
     private ShoppingCart cart;
@@ -68,13 +68,15 @@ public class ShoppingCartService implements IStopable, IProgram {
 
             AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(m);
 
+            double ammount = mainService.getShoppingCartService().getCart().getTotalAmount();
+
             method.execute(getScanner());
 
 
             if (!(method instanceof OnAccount)) {
-                System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ")");
+                System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ ammount +" CHF)");
             }else {
-                System.out.println("Bestellung auf rechnung hinzugefügt.");
+                System.out.println("Bestellung auf rechnung hinzugefügt. (" + ammount + " CHF)");
             }
         } else {
             System.out.println("invalid user input!");

@@ -2,10 +2,10 @@ package me.niveau3.services.mark;
 
 import lombok.Getter;
 import me.niveau3.services.MainService;
-import service.api.IProgram;
+import service.api.AbstractProgram;
 import service.api.IStopable;
 @Getter
-public class MarkService implements IProgram, IStopable {
+public class MarkService extends AbstractProgram implements IStopable {
     private MainService mainService;
 
     public MarkService(MainService mainService) {

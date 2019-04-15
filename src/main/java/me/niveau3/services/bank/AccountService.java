@@ -2,11 +2,10 @@ package me.niveau3.services.bank;
 
 import lombok.Getter;
 import me.niveau3.objects.Account;
-import me.niveau3.objects.AccountManager;
-import me.niveau3.payment_method.OnAccount;
+import me.niveau3.payment_methods.OnAccount;
 import me.niveau3.services.MainService;
 import me.niveau3.util.Hasher;
-import service.api.IProgram;
+import service.api.AbstractProgram;
 import service.api.IStopable;
 
 /**
@@ -17,14 +16,12 @@ import service.api.IStopable;
  * handle multiple Users at once.
  */
 @Getter
-public class AccountService implements IStopable, IProgram {
+public class AccountService extends AbstractProgram implements IStopable {
     boolean stop = false;
-    private AccountManager accountManager;
     private MainService mainService;
 
     public AccountService(MainService mainService) {
         this.mainService = mainService;
-        this.accountManager = new AccountManager();
     }
 
     /**
@@ -34,15 +31,16 @@ public class AccountService implements IStopable, IProgram {
      */
     @Override
     public void execute() {
-        if (accountManager.getAccountCount() < 1) {
+        if (mainService.getAccountManager().getAccountCount() < 1) {
             handleAccountCreation();
             return;
         }
 
         System.out.println("Bitte gebe ein ob du einen Account erstellen oder dich bei einem anmelden möchtest:");
-        System.out.println("1 - Account erstellen");
-        System.out.println("2 - sich bei Account anmelden!");
-        System.out.println("3 - Accounts auflisten");
+        System.out.println("[1] Account erstellen");
+        System.out.println("[2] sich bei Account anmelden!");
+        System.out.println("[3] Accounts auflisten");
+        System.out.println("[stop] Programm beenden");
         String input = getScanner().next("Fehlerhafte eingabe, versuchen sie es erneut!", "1", "2", "3");
 
         if (input == null) {
@@ -59,7 +57,7 @@ public class AccountService implements IStopable, IProgram {
                 break;
             case "3":
                 System.out.println("Alle Accounts:");
-                for (String s : accountManager.getAccountNames()) {
+                for (String s : mainService.getAccountManager().getAccountNames()) {
                     System.out.println(s);
                 }
                 break;
@@ -79,7 +77,7 @@ public class AccountService implements IStopable, IProgram {
             return;
         }
 
-        if (accountManager.exists(name)) {
+        if (mainService.getAccountManager().exists(name)) {
             System.out.println("Dieser Account existiert bereits, Account erstellen abgebrochen.");
             return;
         }
@@ -99,7 +97,7 @@ public class AccountService implements IStopable, IProgram {
             return;
         }
 
-        accountManager.addAccount(new Account(startKapital, name), passwordhash);
+        mainService.getAccountManager().addAccount(new Account(startKapital, name), passwordhash);
         System.out.println("Account mit dem Namen " + name + " wurde erstellt!");
     }
 
@@ -110,7 +108,7 @@ public class AccountService implements IStopable, IProgram {
     private void handleAccountOperations() {
         System.out.println("geben sie einen Accountnamen ein:");
 
-        String[] allAccountNames = accountManager.getAccountNames().toArray(new String[0]);
+        String[] allAccountNames = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
         String accountName = getScanner().next("Dieser Account existiert nicht, versuchen sie es erneut!", allAccountNames);
 
         if (accountName == null) {
@@ -127,24 +125,24 @@ public class AccountService implements IStopable, IProgram {
             }
 
             String password = Hasher.getMd5(next);
-            System.out.println("pw hash: " + password);
-            if (accountManager.canLogin(accountName, password)) {
+            if (mainService.getAccountManager().canLogin(accountName, password)) {
                 break;
             }else {
                 System.out.println("Anmeldung fehlgeschlagen");
             }
         }
 
-        Account account = accountManager.getAccount(accountName);
+        Account account = mainService.getAccountManager().getAccount(accountName);
 
-        allAccountNames = accountManager.getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
+        allAccountNames = mainService.getAccountManager().getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
 
         System.out.println("bitte gebe ein, was du machen willst:");
-        System.out.println("1 - Abheben");
-        System.out.println("2 - Hinzufügen");
-        System.out.println("3 - Bilanz anzeigen");
-        System.out.println("4 - Geld überweisen");
-        System.out.println("5 - Rechnung begleichen");
+        System.out.println("[1] Abheben");
+        System.out.println("[2] Hinzufügen");
+        System.out.println("[3] Bilanz anzeigen");
+        System.out.println("[4] Geld überweisen");
+        System.out.println("[5] Rechnung begleichen");
+        System.out.println("[stop] Programm beenden");
 
         String input = getScanner().next("Invalider Input, versuchen sie es erneut!", "1", "2", "3", "4", "5");
 
@@ -174,7 +172,7 @@ public class AccountService implements IStopable, IProgram {
                     return;
                 }
 
-                Account targetAccount = accountManager.getAccount(targetAccountName);
+                Account targetAccount = mainService.getAccountManager().getAccount(targetAccountName);
                 System.out.println("geben sie bitte jetzt an, wie viel sie überweisen wollen.");
                 Double amount = getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0 && account.getBilanz() - aDouble > 0);
 

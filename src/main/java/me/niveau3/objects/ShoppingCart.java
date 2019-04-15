@@ -22,6 +22,10 @@ public class ShoppingCart {
         return current-1;
     }
 
+    public double getTotalAmount() {
+        return items.values().stream().mapToDouble(value -> value.getAmount() * value.getProduct().getPrice()).sum();
+    }
+
     public ShoppingCartItem removeItem(int id) {
         var item = items.remove(id);
         current += 1;

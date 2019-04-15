@@ -1,12 +1,12 @@
-package me.niveau3.payment_method;
+package me.niveau3.payment_methods;
 
 import me.niveau3.objects.Account;
 import me.niveau3.services.MainService;
 import me.niveau3.util.Hasher;
-import service.api.InternalScanner;
+import service.api.IScanner;
 
 public class PaymentUtils {
-    protected static void payItems(MainService mainService, InternalScanner scanner, double amount) {
+    protected static void payItems(MainService mainService, IScanner scanner, double amount) {
         System.out.println("Du willst " + amount + " mit deinem Bankkonto Bezahlen.");
         System.out.println("Bitte wähle ein Konto aus.");
 
@@ -29,7 +29,6 @@ public class PaymentUtils {
             }
 
             String password = Hasher.getMd5(next);
-            System.out.println("pw hash: " + password);
             if (mainService.getAccountManager().canLogin(accName, password)) {
                 break;
             }else {

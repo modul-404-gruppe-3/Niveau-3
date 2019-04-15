@@ -3,7 +3,7 @@ package me.niveau3.api;
 import lombok.Getter;
 import me.niveau3.objects.ShoppingCart;
 import me.niveau3.services.MainService;
-import service.api.InternalScanner;
+import service.api.IScanner;
 
 @Getter
 public abstract class AbstractPaymentMethod {
@@ -17,5 +17,5 @@ public abstract class AbstractPaymentMethod {
     }
 
     public abstract String getDisplayName();
-    public abstract void execute(InternalScanner scanner);
+    public abstract void execute(IScanner scanner);
 }

@@ -1,8 +1,8 @@
-package me.niveau3.payment_method;
+package me.niveau3.payment_methods;
 
 import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.services.MainService;
-import service.api.InternalScanner;
+import service.api.IScanner;
 
 public class CreditCard extends AbstractPaymentMethod {
 
@@ -16,7 +16,7 @@ public class CreditCard extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute(InternalScanner scanner) {
+    public void execute(IScanner scanner) {
         final double amount = getCart().getItems()
                 .values().stream()
                 .mapToDouble(i -> i.getProduct().getPrice() * i.getAmount())
