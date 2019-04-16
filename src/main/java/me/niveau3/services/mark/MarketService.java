@@ -4,14 +4,21 @@ import lombok.Getter;
 import me.niveau3.services.MainService;
 import service.api.AbstractProgram;
 import service.api.IStopable;
+
+/**
+ * The main service for all market activity
+ */
 @Getter
-public class MarkService extends AbstractProgram implements IStopable {
+public class MarketService extends AbstractProgram implements IStopable {
     private MainService mainService;
 
-    public MarkService(MainService mainService) {
+    public MarketService(MainService mainService) {
         this.mainService = mainService;
     }
 
+    /**
+     * this method lets you chose between a showing the product list and showing the shopping cart.
+     */
     @Override
     public void execute() {
         System.out.println("Bitte wähle eine Aktion aus:");

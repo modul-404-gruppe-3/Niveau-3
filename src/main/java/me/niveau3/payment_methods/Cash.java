@@ -4,6 +4,9 @@ import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.services.MainService;
 import service.api.IScanner;
 
+/**
+ * the simplest payment method. It will only clear the shopping cart object.
+ */
 public class Cash extends AbstractPaymentMethod {
     public Cash(MainService mainService) {
         super(mainService);
@@ -14,6 +17,10 @@ public class Cash extends AbstractPaymentMethod {
         return "Bar";
     }
 
+    /**
+     * simply clears the shopping cart.
+     * @param scanner
+     */
     @Override
     public void execute(IScanner scanner) {
         getMainService().getShoppingCartService().getCart().clear();

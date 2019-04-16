@@ -8,6 +8,9 @@ import me.niveau3.services.MainService;
 import service.api.AbstractProgram;
 import service.api.IStopable;
 
+/**
+ * this service lets you manage the shopping cart.
+ */
 public class ShoppingCartService extends AbstractProgram implements IStopable {
 
     @Getter
@@ -20,6 +23,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
     }
 
+    /**
+     * this method will let you chose between removing products from the shopping cart and checking out.
+     */
     @Override
     public void execute() {
         System.out.println("==================");

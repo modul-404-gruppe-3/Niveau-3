@@ -8,6 +8,9 @@ import service.api.IStopable;
 
 import java.util.HashMap;
 
+/**
+ * this service makes it possible to add products to the shopping cart.
+ */
 public class ProductService extends AbstractProgram implements IStopable {
 
     @Getter

@@ -4,6 +4,9 @@ import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.services.MainService;
 import service.api.IScanner;
 
+/**
+ * the method that allows creditcart payment.
+ */
 public class CreditCard extends AbstractPaymentMethod {
 
     public CreditCard(MainService mainService) {

@@ -9,6 +9,9 @@ import service.api.IScanner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * the method that allows payment on account payment.
+ */
 public class OnAccount extends AbstractPaymentMethod {
     @Getter
     private static OnAccount account;
@@ -26,12 +29,19 @@ public class OnAccount extends AbstractPaymentMethod {
         return "Auf Rechnung";
     }
 
+    /**
+     * this method will only add the items in the cart to the list to be payed later.
+     */
     @Override
     public void execute(IScanner scanner) {
         items.addAll(getCart().getItems().values());
         getCart().clear();
     }
 
+    /**
+     * this method will remove the money from the account.
+     * @param scanner
+     */
     public void pay(IScanner scanner) {
         final double amount = items
                 .stream()

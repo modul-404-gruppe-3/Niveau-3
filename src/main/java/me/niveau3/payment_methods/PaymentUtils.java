@@ -6,6 +6,10 @@ import me.niveau3.util.Hasher;
 import service.api.IScanner;
 
 public class PaymentUtils {
+    /**
+     * the method that will go to a account and take the money after verification.
+     * @param amount the amount that will be taken
+     */
     protected static void payItems(MainService mainService, IScanner scanner, double amount) {
         System.out.println("Du willst " + amount + " mit deinem Bankkonto Bezahlen.");
         System.out.println("Bitte wähle ein Konto aus.");
