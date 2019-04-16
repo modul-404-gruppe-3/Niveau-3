@@ -19,7 +19,6 @@ public class Cash extends AbstractPaymentMethod {
 
     /**
      * simply clears the shopping cart.
-     * @param scanner
      */
     @Override
     public void execute(IScanner scanner) {

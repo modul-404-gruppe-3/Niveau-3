@@ -32,7 +32,7 @@ public class PaymentUtils {
                 return;
             }
 
-            String password = Hasher.getMd5(next);
+            String password = Hasher.getSHA(next);
             if (mainService.getAccountManager().canLogin(accName, password)) {
                 break;
             }else {

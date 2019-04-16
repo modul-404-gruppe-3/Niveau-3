@@ -82,7 +82,7 @@ public class BankService extends AbstractProgram implements IStopable {
             return;
         }
         System.out.println("Geben Sie das passwort an:");
-        String passwordhash = Hasher.getMd5(getScanner().next());
+        String passwordhash = Hasher.getSHA(getScanner().next());
 
         if (passwordhash == null) {
             System.out.println("account erstellen abgeborchen.");
@@ -124,7 +124,7 @@ public class BankService extends AbstractProgram implements IStopable {
                 return;
             }
 
-            String password = Hasher.getMd5(next);
+            String password = Hasher.getSHA(next);
             if (mainService.getAccountManager().canLogin(accountName, password)) {
                 break;
             }else {
