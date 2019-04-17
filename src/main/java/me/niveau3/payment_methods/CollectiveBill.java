@@ -34,14 +34,15 @@ public class CollectiveBill extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         ShoppingCart cart = getMainService().getShoppingCartService().getCart();
 
         getBill().getItems().addAll(cart.clear());
+        return true;
     }
 
     @Override
-    public void pay() {
-        PaymentUtils.payItems(getMainService(), getBill().getItems());
+    public boolean pay() {
+        return PaymentUtils.payItems(getMainService(), getBill().getItems());
     }
 }

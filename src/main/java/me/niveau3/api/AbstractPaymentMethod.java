@@ -24,10 +24,10 @@ public abstract class AbstractPaymentMethod {
     /**
      * this method will be executed when checking out.
      */
-    public abstract void execute();
+    public abstract boolean execute();
 
     /**
      * With this method you can initiate the payment.
      */
-    public abstract void pay();
+    public abstract boolean pay();
 }

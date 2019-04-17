@@ -22,12 +22,12 @@ public class CreditCard extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute() {
-        pay();
+    public boolean execute() {
+        return pay();
     }
 
     @Override
-    public void pay() {
-        PaymentUtils.payItems(getMainService(), getMainService().getShoppingCartService().getCart().clear());
+    public boolean pay() {
+        return PaymentUtils.payItems(getMainService(), getMainService().getShoppingCartService().getCart().clear());
     }
 }

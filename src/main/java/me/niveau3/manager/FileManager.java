@@ -27,6 +27,10 @@ public class FileManager {
      * this Method is there to serialize the Account Manager class and write it into data.json.
      */
     public void saveAccountManager() {
+        if (!mainService.isWriteToFile()) {
+            return;
+        }
+
         try {
             Reader initialReader = new StringReader(new Gson().toJson(mainService.getAccountManager()));
 
@@ -47,6 +51,10 @@ public class FileManager {
      * this Method is there to serialize the Product Manager class and write it into products.json.
      */
     public void saveProducts() {
+        if (!mainService.isWriteToFile()) {
+            return;
+        }
+
         try {
             Reader initialReader = new StringReader(new Gson().toJson(mainService.getProductManager()));
 

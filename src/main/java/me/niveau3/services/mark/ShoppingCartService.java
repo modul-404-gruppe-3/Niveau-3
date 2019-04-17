@@ -105,7 +105,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
             double amount = mainService.getShoppingCartService().getCart().getTotalAmount();
 
-            method.execute();
+            if (!method.execute()) {
+                return;
+            }
 
 
             if (!(method instanceof CollectiveBill)) {

@@ -17,7 +17,7 @@ public class AccountTests {
 
     @BeforeEach
     public void beforeEach() {
-        sut = new MainService();
+        sut = new MainService(false);
 
         PaymentMethodManager paymentMethodManager = sut.getPaymentMethodManager();
 
@@ -65,7 +65,7 @@ public class AccountTests {
 
         sut.run();
 
-        Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g").getBilanz());
+        Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g").getBalance());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class AccountTests {
 
         sut.run();
 
-        Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBilanz());
+        Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBalance());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AccountTests {
 
         sut.run();
 
-        Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBilanz());
-        Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g2").getBilanz());
+        Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBalance());
+        Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g2").getBalance());
     }
 }

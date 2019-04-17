@@ -9,7 +9,7 @@ import me.niveau3.manager.PaymentMethodManager;
 public class Main {
     public static void main(String[] args) {
 
-        MainService mainService = new MainService();
+        MainService mainService = new MainService(true);
 
         registerPaymentMethods(mainService);
 

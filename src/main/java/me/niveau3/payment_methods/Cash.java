@@ -18,12 +18,13 @@ public class Cash extends AbstractPaymentMethod {
     }
 
     @Override
-    public void execute() {
-        pay();
+    public boolean execute() {
+        return pay();
     }
 
     @Override
-    public void pay() {
+    public boolean pay() {
         getMainService().getShoppingCartService().getCart().clear();
+        return true;
     }
 }

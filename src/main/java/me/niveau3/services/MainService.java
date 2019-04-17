@@ -26,8 +26,10 @@ public class MainService extends AbstractProgram implements IStopable {
     private BankService bankService;
     private FileManager fileManager;
     private ProductManager productManager;
+    private boolean writeToFile;
 
-    public MainService() {
+    public MainService(boolean writeToFile) {
+        this.writeToFile = writeToFile;
         this.stop = false;
 
         this.fileManager = new FileManager(this);
