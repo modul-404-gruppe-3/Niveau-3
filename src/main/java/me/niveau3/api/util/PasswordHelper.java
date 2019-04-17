@@ -81,13 +81,4 @@ public class PasswordHelper {
         }
         return bytes;
     }
-
-
-    public static void main(String[] args) {
-        String baum = getPBKDF("baum");
-
-        System.out.println(validatePassword("baum", baum));
-        System.out.println(validatePassword("baum1", baum));
-        System.out.println(validatePassword("Baum", baum));
-    }
 }
