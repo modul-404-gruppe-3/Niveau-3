@@ -44,7 +44,7 @@ public class AccountTests {
 
         sut.run();
 
-        Assertions.assertTrue(sut.getAccountManager().canLogin("g", Hasher.getSHA("123")));
+        Assertions.assertTrue(sut.getAccountManager().canLogin("g", "123"));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AccountTests {
 
         sut.run();
 
-        Assertions.assertFalse(sut.getAccountManager().canLogin("g", Hasher.getSHA("321")));
+        Assertions.assertFalse(sut.getAccountManager().canLogin("g", "321"));
     }
 
     @Test

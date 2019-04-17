@@ -1,57 +1,93 @@
 package me.niveau3.util;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 public class Hasher {
     /**
      * a simple hasher for passwords etc.
-     * @param input the string to be hashed
      * @return the hashed string
      */
-    public static String getMd5(String input)
+    public static String getPBKDF(String password)
     {
         try {
-            String hashtext =  new BigInteger(1, MessageDigest.getInstance("MD5").digest(input.getBytes())).toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        }
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+            int iterations = 1000;
+            char[] chars = password.toCharArray();
+            byte[] salt = getSalt();
 
-    public static String getSHA(String input)
-    {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            String hashtext = no.toString(16);
-
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            return hashtext;
-        }
-
-        catch (NoSuchAlgorithmException e) {
-            System.out.println("Exception thrown"
-                    + " for incorrect algorithm: " + e);
+            PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = skf.generateSecret(spec).getEncoded();
+            return iterations + ":" + toHex(salt) + ":" + toHex(hash);
+        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
+    private static byte[] getSalt() throws NoSuchAlgorithmException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt;
+    }
+
+    private static String toHex(byte[] array)
+    {
+        BigInteger bi = new BigInteger(1, array);
+        String hex = bi.toString(16);
+        int paddingLength = (array.length * 2) - hex.length();
+        if(paddingLength > 0)
+        {
+            return String.format("%0"  +paddingLength + "d", 0) + hex;
+        }else{
+            return hex;
+        }
+    }
+
+    public static boolean validatePassword(String userInput, String storedPassword)
+    {
+        try {
+            String[] parts = storedPassword.split(":");
+            int iterations = Integer.parseInt(parts[0]);
+            byte[] salt = fromHex(parts[1]);
+            byte[] hash = fromHex(parts[2]);
+
+            PBEKeySpec spec = new PBEKeySpec(userInput.toCharArray(), salt, iterations, hash.length * 8);
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] testHash = skf.generateSecret(spec).getEncoded();
+
+            int diff = hash.length ^ testHash.length;
+            for(int i = 0; i < hash.length && i < testHash.length; i++)
+            {
+                diff |= hash[i] ^ testHash[i];
+            }
+            return diff == 0;
+        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static byte[] fromHex(String hex)
+    {
+        byte[] bytes = new byte[hex.length() / 2];
+        for(int i = 0; i<bytes.length ;i++)
+        {
+            bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+        }
+        return bytes;
+    }
+
 
     public static void main(String[] args) {
-        System.out.println(getSHA("baum"));
-        System.out.println(getSHA("baum"));
+        String baum = getPBKDF("baum");
+
+        System.out.println(validatePassword("baum", baum));
+        System.out.println(validatePassword("baum1", baum));
+        System.out.println(validatePassword("Baum", baum));
     }
 }

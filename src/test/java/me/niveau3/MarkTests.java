@@ -1,5 +1,7 @@
 package me.niveau3;
 
+import com.google.common.io.CharSink;
+import com.google.common.io.FileWriteMode;
 import me.niveau3.objects.PaymentMethodManager;
 import me.niveau3.objects.ShoppingCart;
 import me.niveau3.payment_methods.Cash;
@@ -11,6 +13,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.api.AbstractProgram;
 import service.api.MockScanner;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.nio.charset.Charset;
 
 public class MarkTests {
 
@@ -38,5 +46,13 @@ public class MarkTests {
         sut.run();
 
         Assertions.assertEquals(91, sut.getShoppingCartService().getCart().getTotalAmount());
+    }
+
+    @Test
+    public void givenUsingGuava_whenWritingReaderContentsToFile_thenCorrect()
+            throws IOException {
+
+
+
     }
 }

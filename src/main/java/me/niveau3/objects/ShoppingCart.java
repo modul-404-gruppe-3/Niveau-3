@@ -3,6 +3,7 @@ package me.niveau3.objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * this object is used to make it possible to theoretically have multiple shopping carts.
  * It serves as a List of ShoppingCartItems with additional Functionality.
  */
-public class ShoppingCart {
+public class ShoppingCart implements Serializable {
     @Getter
     HashMap<Integer, ShoppingCartItem> items;
     int current = 0;

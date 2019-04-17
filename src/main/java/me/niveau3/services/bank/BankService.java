@@ -6,6 +6,7 @@ import me.niveau3.payment_methods.OnAccount;
 import me.niveau3.services.MainService;
 import me.niveau3.util.Hasher;
 import service.api.AbstractProgram;
+import service.api.IScanner;
 import service.api.IStopable;
 
 /**
@@ -19,6 +20,7 @@ import service.api.IStopable;
 public class BankService extends AbstractProgram implements IStopable {
     boolean stop = false;
     private MainService mainService;
+    private Account loggedInAccount;
 
     public BankService(MainService mainService) {
         this.mainService = mainService;
@@ -26,7 +28,7 @@ public class BankService extends AbstractProgram implements IStopable {
 
     /**
      * This Method will be executed every time the Program gets started. This means that it will be executed every time
-     * the Program in initsself will be started as well es every time a Action like see Bank balance is complete and the
+     * the Program in inits self will be started as well es every time a Action like see Bank balance is complete and the
      * user choses not to stop the program via the stop command.
      */
     @Override
@@ -66,7 +68,7 @@ public class BankService extends AbstractProgram implements IStopable {
 
     /**
      * This Method is a Part the GUI for the Account Management.
-     * It Handles the creation of the Account as well as the default ammount.
+     * It Handles the creation of the Account as well as the default amount.
      */
     private void handleAccountCreation() {
         System.out.println("bitte geben sie den Namen des Accounts an, den sie erstellen möchten:");
@@ -82,7 +84,7 @@ public class BankService extends AbstractProgram implements IStopable {
             return;
         }
         System.out.println("Geben Sie das passwort an:");
-        String passwordhash = Hasher.getSHA(getScanner().next());
+        String passwordhash = Hasher.getPBKDF(getScanner().next());
 
         if (passwordhash == null) {
             System.out.println("account erstellen abgeborchen.");
@@ -108,33 +110,12 @@ public class BankService extends AbstractProgram implements IStopable {
     private void handleAccountOperations() {
         System.out.println("geben sie einen Accountnamen ein:");
 
-        String[] allAccountNames = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
-        String accountName = getScanner().next("Dieser Account existiert nicht, versuchen sie es erneut!", allAccountNames);
+        Account account = this.login();
 
-        if (accountName == null) {
-            System.out.println("Account anmelden abgebrochen!");
+        if (account == null) {
+            System.out.println("Aktion abgebrochen.");
             return;
         }
-
-        while (true) {
-            System.out.println("Geben sie ihr passwort an!");
-            String next = getScanner().next();
-            if (next == null) {
-                System.out.println("Account anmelden abgebrochen!");
-                return;
-            }
-
-            String password = Hasher.getSHA(next);
-            if (mainService.getAccountManager().canLogin(accountName, password)) {
-                break;
-            }else {
-                System.out.println("Anmeldung fehlgeschlagen");
-            }
-        }
-
-        Account account = mainService.getAccountManager().getAccount(accountName);
-
-        allAccountNames = mainService.getAccountManager().getAccountNames().stream().filter(s -> !s.equalsIgnoreCase(accountName)).toArray(String[]::new);
 
         System.out.println("bitte gebe ein, was du machen willst:");
         System.out.println("[1] Abheben");
@@ -142,9 +123,10 @@ public class BankService extends AbstractProgram implements IStopable {
         System.out.println("[3] Bilanz anzeigen");
         System.out.println("[4] Geld überweisen");
         System.out.println("[5] Rechnung begleichen");
+        System.out.println("[6] Abmelden");
         System.out.println("[stop] Programm beenden");
 
-        String input = getScanner().next("Invalider Input, versuchen sie es erneut!", "1", "2", "3", "4", "5");
+        String input = getScanner().next("Invalider Input, versuchen sie es erneut!", "1", "2", "3", "4", "5", "6");
 
         if (input == null) {
             System.out.println("Auswahl abgebrochen.");
@@ -165,7 +147,8 @@ public class BankService extends AbstractProgram implements IStopable {
                 break;
             case "4":
                 System.out.println("geben sie den Namen des Accounts an auf den sie Geld überweisen wollen.");
-                String targetAccountName = getScanner().next("Dieser Account existiert nicht, bitte versuchen sie er erneut.", allAccountNames);
+                String targetAccountName = getScanner().next("Dieser Account existiert nicht, bitte versuchen sie er erneut.",
+                        mainService.getAccountManager().getAccountNames().toArray(new String[0]));
 
                 if (targetAccountName == null) {
                     System.out.println("Überweisung abgebrochen.");
@@ -186,8 +169,41 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("Du hast " + targetAccountName + " " + amount + " überwiesen.");
                 break;
             case "5":
-                OnAccount.getAccount().pay(getScanner());
+                OnAccount.getInstance().pay();
                 break;
+            case "6":
+                loggedInAccount =null;
+                System.out.println("erfolgreich abgemeldet.");
+                break;
+        }
+    }
+
+    public Account login() {
+        System.out.println("Bitte geben sie den Namen ihres Accounts an.");
+        String[] strings = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
+        String accName = getScanner().next(
+                "Bitte geben einen Account an der existiert und genug geld auf dem Konto hat."
+                , strings);
+
+        if (accName == null) {
+            System.out.println("Zahlung mit Karte abgebrochen.");
+            return null;
+        }
+
+        while (true) {
+            System.out.println("Geben sie ihr Passwort an!");
+            String next = getScanner().next();
+            if (next == null) {
+                System.out.println("Account anmelden abgebrochen!");
+                return null;
+            }
+
+            if (this.getMainService().getAccountManager().canLogin(accName, next)) {
+                loggedInAccount = this.getMainService().getAccountManager().getAccount(accName);
+                return loggedInAccount;
+            } else {
+                System.out.println("Anmeldung fehlgeschlagen");
+            }
         }
     }
 }

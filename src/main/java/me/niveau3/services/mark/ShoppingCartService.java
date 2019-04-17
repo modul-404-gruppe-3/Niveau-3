@@ -1,6 +1,5 @@
 package me.niveau3.services.mark;
 
-import lombok.Getter;
 import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.objects.ShoppingCart;
 import me.niveau3.payment_methods.OnAccount;
@@ -12,15 +11,18 @@ import service.api.IStopable;
  * this service lets you manage the shopping cart.
  */
 public class ShoppingCartService extends AbstractProgram implements IStopable {
-
-    @Getter
-    private ShoppingCart cart;
     private MainService mainService;
+    private static ShoppingCart noLoginCart;
+
+    public ShoppingCart getCart() {
+        return  (mainService.getBankService().getLoggedInAccount() == null)
+                ? noLoginCart
+                : mainService.getBankService().getLoggedInAccount().getCart();
+    }
 
     public ShoppingCartService(MainService mainService) {
         this.mainService = mainService;
-        cart = new ShoppingCart();
-
+        noLoginCart = new ShoppingCart();
     }
 
     /**
@@ -28,11 +30,17 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
      */
     @Override
     public void execute() {
+        System.out.println("wollen sie sich anmelden?");
+
+        if (mainService.getBankService().getLoggedInAccount() == null) {
+
+        }
+
         System.out.println("==================");
         System.out.println("     Warenkorb");
         System.out.println("==================");
 
-        for (ShoppingCart.ShoppingCartItem item : cart.getItems().values()) {
+        for (ShoppingCart.ShoppingCartItem item : getCart().getItems().values()) {
 
             System.out.println(String.format("[%s] %s (%s CHF) * %s (total:%s)",
                     item.getId(),
@@ -60,9 +68,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
             System.out.println("Bitte geben Sie die Id des Objektes an, dass sie entfernen wollen.");
 
             Integer id = getScanner().nextInteger("Bitte geben sie eine Id eines Items aus dem Warenkorb an.",
-                    cart.getItems().keySet().stream().map(integer -> "" + integer).toArray(String[]::new));
+                    getCart().getItems().keySet().stream().map(integer -> "" + integer).toArray(String[]::new));
 
-            var item = cart.removeItem(id);
+            var item = getCart().removeItem(id);
             System.out.println(item.getProduct().getName() + " wurde aus der Listen entfernt.");
         }else if (input.equalsIgnoreCase("2")) {
             System.out.println("Gib eine der Folgenden Zahlungsmethoden an:");

@@ -4,6 +4,8 @@ import me.niveau3.api.AbstractPaymentMethod;
 import me.niveau3.services.MainService;
 import service.api.IScanner;
 
+import java.util.ArrayList;
+
 /**
  * the method that allows creditcart payment.
  */
@@ -20,11 +22,6 @@ public class CreditCard extends AbstractPaymentMethod {
 
     @Override
     public void execute(IScanner scanner) {
-        final double amount = getCart().getItems()
-                .values().stream()
-                .mapToDouble(i -> i.getProduct().getPrice() * i.getAmount())
-                .sum();
-
-        PaymentUtils.payItems(getMainService(), scanner, amount);
+        PaymentUtils.payItems(getMainService(), new ArrayList<>(getMainService().getShoppingCartService().getCart().getItems().values()));
     }
 }

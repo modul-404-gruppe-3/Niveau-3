@@ -11,12 +11,10 @@ import service.api.IScanner;
 @Getter
 public abstract class AbstractPaymentMethod {
 
-    private ShoppingCart cart;
     private MainService mainService;
 
     public AbstractPaymentMethod(MainService mainService) {
         this.mainService = mainService;
-        this.cart = mainService.getShoppingCartService().getCart();
     }
 
     /**

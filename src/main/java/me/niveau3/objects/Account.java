@@ -2,15 +2,29 @@ package me.niveau3.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+
+import java.io.Serializable;
 
 @AllArgsConstructor
 @Getter
 /**
  * Simple data holder Object for the Account information.
  */
-public class Account {
-    private double bilanz;
-    private String name;
+public class Account implements Serializable {
+    @NonNull private double bilanz;
+    @NonNull private String name;
+    private ShoppingCart cart;
+    private Bill bill;
+
+
+
+    public Account(@NonNull double bilanz, @NonNull String name) {
+        this.bilanz = bilanz;
+        this.name = name;
+        this.cart = new ShoppingCart();
+        this.bill = new Bill();
+    }
 
     /**
      * adds the given amount the the bilanz double.

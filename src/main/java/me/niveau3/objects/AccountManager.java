@@ -1,14 +1,18 @@
 package me.niveau3.objects;
 
+import me.niveau3.util.Hasher;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
  * Managing Accounts
  */
-public class AccountManager {
+public class AccountManager implements Serializable {
     private HashMap<String, Account> accounts;
     private HashMap<String, String> pwhashes; // account name -> pw hash
+
     public AccountManager() {
         accounts = new HashMap<>();
         pwhashes = new HashMap<>();
@@ -16,6 +20,7 @@ public class AccountManager {
 
     /**
      * sets an Account, even if it already exists.
+     *
      * @param account
      */
     public void addAccount(Account account, String passwordHash) {
@@ -25,6 +30,7 @@ public class AccountManager {
 
     /**
      * removes account, if the given account does not exist, it will do nothing.
+     *
      * @param account
      */
     public void removeAccount(String account) {
@@ -57,6 +63,7 @@ public class AccountManager {
 
     /**
      * checks if the given account exists.
+     *
      * @param accountName the name of the account to check for.
      * @return true of the account exists, false if it does not.
      */
@@ -64,8 +71,10 @@ public class AccountManager {
         return accounts.containsKey(accountName);
     }
 
-    public boolean canLogin(String accountName, String passwordHash) {
-        return pwhashes.get(accountName).equals(passwordHash);
+    public boolean canLogin(String accountName, String password) {
+        return Hasher.validatePassword(password, pwhashes.get(accountName));
     }
+
+
 
 }
