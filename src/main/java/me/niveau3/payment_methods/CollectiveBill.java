@@ -37,8 +37,7 @@ public class CollectiveBill extends AbstractPaymentMethod {
     public void execute() {
         ShoppingCart cart = getMainService().getShoppingCartService().getCart();
 
-        getBill().getItems().addAll(cart.getItems().values());
-        cart.clear();
+        getBill().getItems().addAll(cart.clear());
     }
 
     @Override

@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.niveau3.manager.AccountManager;
 import me.niveau3.manager.FileManager;
 import me.niveau3.manager.PaymentMethodManager;
+import me.niveau3.manager.ProductManager;
 import me.niveau3.services.bank.BankService;
 import me.niveau3.services.mark.MarketService;
 import me.niveau3.services.mark.ProductService;
@@ -24,15 +25,22 @@ public class MainService extends AbstractProgram implements IStopable {
     private AccountManager accountManager;
     private BankService bankService;
     private FileManager fileManager;
+    private ProductManager productManager;
 
     public MainService() {
         this.stop = false;
+
         this.fileManager = new FileManager(this);
+
         this.marketService = new MarketService(this);
+        this.shoppingCartService = new ShoppingCartService(this);
+
         this.bankService = new BankService(this);
         this.accountManager = fileManager.load();
-        this.shoppingCartService = new ShoppingCartService(this);
+
+        this.productManager = fileManager.loadProducts();
         this.productService = new ProductService(this);
+
         this.paymentMethodManager = new PaymentMethodManager();
     }
 
@@ -84,5 +92,6 @@ public class MainService extends AbstractProgram implements IStopable {
     @Override
     public void stop() {
         fileManager.save();
+        fileManager.saveProducts();
     }
 }

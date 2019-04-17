@@ -12,7 +12,6 @@ public class PaymentUtils {
      * the method that will go to a account and take the money after verification.
      */
     public static void payItems(MainService mainService, List<ShoppingCart.ShoppingCartItem> items) {
-
         double amount = items
                 .stream()
                 .mapToDouble(i -> i.getProduct().getPrice() * i.getAmount())
@@ -25,6 +24,11 @@ public class PaymentUtils {
         if (mainService.getBankService().getLoggedInAccount() == null) {
             System.out.println("Wenn sie sich Anmelden werden alle einträge vom öffentlichen Warenkorb in ihr eigener verschoben.");
             account = mainService.getBankService().login();
+
+            if (account == null) {
+                System.out.println("Abmelden abgebrochen.");
+                return;
+            }
 
             CollectiveBill.getNoLoginBill().transferTo(account.getBill());
             CollectiveBill.getNoLoginBill().getItems().clear();

@@ -28,6 +28,6 @@ public class CreditCard extends AbstractPaymentMethod {
 
     @Override
     public void pay() {
-        PaymentUtils.payItems(getMainService(), new ArrayList<>(getMainService().getShoppingCartService().getCart().getItems().values()));
+        PaymentUtils.payItems(getMainService(), getMainService().getShoppingCartService().getCart().clear());
     }
 }

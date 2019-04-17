@@ -38,6 +38,25 @@ public class FileManager {
         }
     }
 
+
+    public void saveProducts() {
+        try {
+            Reader initialReader = new StringReader(new Gson().toJson(mainService.getProductManager()));
+
+            File targetFile = new File("products.json");
+            targetFile.delete();
+            com.google.common.io.Files.touch(targetFile);
+            CharSink charSink = com.google.common.io.Files.
+                    asCharSink(targetFile, Charset.defaultCharset(), FileWriteMode.APPEND);
+            charSink.writeFrom(initialReader);
+
+            initialReader.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public AccountManager load() {
         try {
             AccountManager accountManager = new Gson().fromJson(Files.toString(new File("data.json"), Charsets.UTF_8), AccountManager.class);
@@ -46,6 +65,16 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("Error while loading AccountManager, creating new one. er: " + e.getMessage());
             return new AccountManager();
+        }
+    }
+
+    public ProductManager loadProducts() {
+        try {
+            ProductManager accountManager = new Gson().fromJson(Files.toString(new File("products.json"), Charsets.UTF_8), ProductManager.class);
+            return accountManager;
+        } catch (IOException e) {
+            System.out.println("Error while loading AccountManager, creating new one. er: " + e.getMessage());
+            return new ProductManager();
         }
     }
 }

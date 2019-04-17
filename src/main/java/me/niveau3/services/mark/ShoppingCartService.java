@@ -1,6 +1,7 @@
 package me.niveau3.services.mark;
 
 import me.niveau3.api.AbstractPaymentMethod;
+import me.niveau3.api.objects.Account;
 import me.niveau3.api.objects.ShoppingCart;
 import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
@@ -30,10 +31,24 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
      */
     @Override
     public void execute() {
-        System.out.println("wollen sie sich anmelden?");
-
+        if (getCart().getItems().values().size() <= 0) {
+            System.out.println("es sind aktuell keine Items in ihrem Warenkorb.");
+        }
         if (mainService.getBankService().getLoggedInAccount() == null) {
+            System.out.println("Sie sind Aktuell nicht angemeldet und haben keine Items in ihrem Warenkorb.");
+            System.out.println("Sie können sich nun Anmelden, oder 'stop' eingeben um den Prozess abzubrechen.");
+        }
 
+        while (getCart().getItems().values().size() <= 0) {
+            Account account = mainService.getBankService().login();
+            if (account == null) {
+                System.out.println("Warenkorb öffnen abgebrochen.");
+                return;
+            }
+
+            if (getCart().getItems().values().size() <= 0) {
+                System.out.println("Dieser Account hat keine Items in seinem Warenkorb.");
+            }
         }
 
         System.out.println("==================");
@@ -82,23 +97,19 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
             AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(m);
 
-            double ammount = mainService.getShoppingCartService().getCart().getTotalAmount();
+            double amount = mainService.getShoppingCartService().getCart().getTotalAmount();
 
             method.execute();
 
 
             if (!(method instanceof CollectiveBill)) {
-                System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ ammount +" CHF)");
+                System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ amount +" CHF)");
             }else {
-                System.out.println("Bestellung auf rechnung hinzugefügt. (" + ammount + " CHF)");
+                System.out.println("Bestellung auf rechnung hinzugefügt. (" + amount + " CHF)");
             }
         } else {
             System.out.println("invalid user input!");
         }
-    }
-
-    @Override
-    public void stop() {
         mainService.getFileManager().save();
     }
 }

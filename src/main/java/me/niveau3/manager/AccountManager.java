@@ -21,8 +21,6 @@ public class AccountManager implements Serializable {
 
     /**
      * sets an Account, even if it already exists.
-     *
-     * @param account
      */
     public void addAccount(Account account, String passwordHash) {
         pwhashes.put(account.getName(), passwordHash);

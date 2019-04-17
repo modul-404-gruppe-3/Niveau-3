@@ -100,6 +100,7 @@ public class BankService extends AbstractProgram implements IStopable {
 
         mainService.getAccountManager().addAccount(new Account(startKapital, name), passwordhash);
         System.out.println("Account mit dem Namen " + name + " wurde erstellt!");
+        mainService.getFileManager().save();
     }
 
     /**
@@ -107,15 +108,18 @@ public class BankService extends AbstractProgram implements IStopable {
      * It Handles every Possible thing that can be done with a Account.
      */
     private void handleAccountOperations() {
-        System.out.println("geben sie einen Accountnamen ein:");
-
-        Account account = this.login();
+        Account account;
+        if (getLoggedInAccount() == null) {
+            account = this.login();
+        }else {
+            account = getLoggedInAccount();
+        }
 
         if (account == null) {
             System.out.println("Aktion abgebrochen.");
             return;
         }
-
+        System.out.println("hallo " + account.getName());
         System.out.println("bitte gebe ein, was du machen willst:");
         System.out.println("[1] Abheben");
         System.out.println("[2] Hinzufügen");
@@ -123,7 +127,7 @@ public class BankService extends AbstractProgram implements IStopable {
         System.out.println("[4] Geld überweisen");
         System.out.println("[5] Rechnung begleichen");
         System.out.println("[6] Abmelden");
-        System.out.println("[stop] Programm beenden");
+        System.out.println("[stop] Zum Hauptmenü zurück.");
 
         String input = getScanner().next("Invalider Input, versuchen sie es erneut!", "1", "2", "3", "4", "5", "6");
 
@@ -175,6 +179,7 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("erfolgreich abgemeldet.");
                 break;
         }
+        mainService.getFileManager().save();
     }
 
     public Account login() {
