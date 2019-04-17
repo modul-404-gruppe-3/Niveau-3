@@ -25,10 +25,13 @@ public class ProductService extends AbstractProgram implements IStopable {
      */
     @Override
     public void execute() {
+        //<editor-fold desc="Produkte auflisten">
         for (Product product : mainService.getProductManager().getProducts().values()) {
             System.out.println("[" + product.getId()+ "] " + product.getName() + ", " + product.getPrice() + " CHF");
         }
+        //</editor-fold>
 
+        //<editor-fold desc="Produkt zum warenkorb hinzufügen">
         System.out.println("Geben sie die Id des Objektes an das sie zum Warenkorb hinzufügen wollen.");
 
         System.out.println(String.join(" ", mainService.getProductManager().getProducts().keySet().stream()
@@ -49,6 +52,6 @@ public class ProductService extends AbstractProgram implements IStopable {
         mainService.getShoppingCartService().getCart().addItem(amount, product);
 
         System.out.println(product.getName() + " wurde " + amount + " mal hinzugefügt.");
-
+        //</editor-fold>
     }
 }

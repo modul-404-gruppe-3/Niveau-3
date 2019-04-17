@@ -35,7 +35,7 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
      */
     @Override
     public void execute() {
-        //verify for a valid account.
+        //<editor-fold desc="verify for a valid account">
         if (getCart().getItems().values().size() <= 0) {
             System.out.println("es sind aktuell keine Items in ihrem Warenkorb.");
         }
@@ -55,8 +55,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
                 System.out.println("Dieser Account hat keine Items in seinem Warenkorb.");
             }
         }
-        //end verify for valid account.
+        //</editor-fold>
 
+        //<editor-fold desc="warenkorb Items auflisten.">
         System.out.println("==================");
         System.out.println("     Warenkorb");
         System.out.println("==================");
@@ -72,6 +73,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
         }
 
         System.out.println("==================");
+        //</editor-fold>
+
+        //<editor-fold desc="nächste Aktion auswählen">
         System.out.println("Bitte geben sie Aktion an:");
         System.out.println("[1] Objekte entfernen.");
         System.out.println("[2] Check out (Bezahlen)");
@@ -83,9 +87,10 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
             System.out.println("Warenkorb verlassen.");
             return;
         }
+        //</editor-fold>
 
         if (input.equalsIgnoreCase("1")) {
-
+            //<editor-fold desc="objekt aus warenkorb entfernen">
             System.out.println("Bitte geben Sie die Id des Objektes an, dass sie entfernen wollen.");
 
             Integer id = getScanner().nextInteger("Bitte geben sie eine Id eines Items aus dem Warenkorb an.",
@@ -93,7 +98,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
             var item = getCart().removeItem(id);
             System.out.println(item.getProduct().getName() + " wurde aus der Listen entfernt.");
+            //</editor-fold>
         }else if (input.equalsIgnoreCase("2")) {
+            //<editor-fold desc="Checkout">
             System.out.println("Gib eine der Folgenden Zahlungsmethoden an:");
             for (String indexesAsString : mainService.getPaymentMethodManager().getIndexesAsStrings()) {
                 System.out.println("[" + indexesAsString + "] " + mainService.getPaymentMethodManager().get(indexesAsString).getDisplayName());
@@ -113,8 +120,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
             if (!(method instanceof CollectiveBill)) {
                 System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ amount +" CHF)");
             }else {
-                System.out.println("Bestellung auf rechnung hinzugefügt. (" + amount + " CHF)");
+                System.out.println("Bestellung zur Rechnung hinzugefügt. (" + amount + " CHF)");
             }
+            //</editor-fold>
         } else {
             System.out.println("invalid user input!");
         }

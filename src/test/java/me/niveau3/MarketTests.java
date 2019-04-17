@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import service.api.AbstractProgram;
 import service.api.MockScanner;
 
-import java.io.IOException;
-
 public class MarketTests {
 
     private MainService sut;

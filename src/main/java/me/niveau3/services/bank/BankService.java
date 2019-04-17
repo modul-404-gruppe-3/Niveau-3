@@ -32,11 +32,14 @@ public class BankService extends AbstractProgram implements IStopable {
      */
     @Override
     public void execute() {
+        //<editor-fold desc="Bei 0 Accounts">
         if (mainService.getAccountManager().getAccountCount() < 1) {
             handleAccountCreation();
             return;
         }
+        //</editor-fold>
 
+        //<editor-fold desc="nächste Aktion auswählen">
         System.out.println("Bitte gebe ein ob du einen Account erstellen oder dich bei einem anmelden möchtest:");
         System.out.println("[1] Account erstellen");
         System.out.println("[2] sich bei Account anmelden!");
@@ -48,6 +51,7 @@ public class BankService extends AbstractProgram implements IStopable {
             stop = true;
             return;
         }
+        //</editor-fold>
 
         switch (input) {
             case "1":
@@ -108,6 +112,7 @@ public class BankService extends AbstractProgram implements IStopable {
      * It Handles every Possible thing that can be done with a Account.
      */
     private void handleAccountOperations() {
+        //<editor-fold desc="Überprüfen ob einloggen notwenig ist">
         Account account;
         if (getLoggedInAccount() == null) {
             account = this.login();
@@ -119,6 +124,9 @@ public class BankService extends AbstractProgram implements IStopable {
             System.out.println("Aktion abgebrochen.");
             return;
         }
+        //</editor-fold>
+
+        //<editor-fold desc="nächste Aktion auswählen">
         System.out.println("hallo " + account.getName());
         System.out.println("bitte gebe ein, was du machen willst:");
         System.out.println("[1] Abheben");
@@ -135,6 +143,7 @@ public class BankService extends AbstractProgram implements IStopable {
             System.out.println("Auswahl abgebrochen.");
             return;
         }
+        //</editor-fold>
         switch (input) {
             case "1":
                 System.out.println("Bitte geben sie eine Zahl ein:");
@@ -149,6 +158,7 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("sie haben Aktuell " + account.getBalance() + " auf ihrem Konto!");
                 break;
             case "4":
+                //<editor-fold desc="Geld überweisen">
                 System.out.println("geben sie den Namen des Accounts an auf den sie Geld überweisen wollen.");
                 String targetAccountName = getScanner().next("Dieser Account existiert nicht, bitte versuchen sie er erneut.",
                         mainService.getAccountManager().getAccountNames().toArray(new String[0]));
@@ -171,6 +181,7 @@ public class BankService extends AbstractProgram implements IStopable {
                 account.transfer(targetAccount, amount);
                 System.out.println("Du hast " + targetAccountName + " " + amount + " überwiesen.");
                 break;
+            //</editor-fold>
             case "5":
                 CollectiveBill.getInstance().pay();
                 break;
@@ -187,6 +198,7 @@ public class BankService extends AbstractProgram implements IStopable {
      * @return the account that will be logged into. null if there was a error or the User enters stop.
      */
     public Account login() {
+        //<editor-fold desc="GetAccountName">
         System.out.println("Bitte geben sie den Namen ihres Accounts an.");
         String[] strings = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
         String accName = getScanner().next(
@@ -197,7 +209,9 @@ public class BankService extends AbstractProgram implements IStopable {
             System.out.println("Zahlung mit Karte abgebrochen.");
             return null;
         }
+        //</editor-fold>
 
+        //<editor-fold desc="Passwort Check">
         while (true) {
             System.out.println("Geben sie ihr Passwort an!");
             String next = getScanner().next();
@@ -213,5 +227,6 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("Anmeldung fehlgeschlagen");
             }
         }
+        //</editor-fold>
     }
 }
