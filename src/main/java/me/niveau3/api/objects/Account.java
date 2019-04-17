@@ -2,7 +2,6 @@ package me.niveau3.api.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.io.Serializable;
 
@@ -12,41 +11,39 @@ import java.io.Serializable;
  * Simple data holder Object for the Account information.
  */
 public class Account implements Serializable {
-    @NonNull private double bilanz;
-    @NonNull private String name;
+    private double balance;
+    private String name;
     private ShoppingCart cart;
     private Bill bill;
 
-
-
-    public Account(@NonNull double bilanz, @NonNull String name) {
-        this.bilanz = bilanz;
+    public Account(double balance, String name) {
+        this.balance = balance;
         this.name = name;
         this.cart = new ShoppingCart();
         this.bill = new Bill();
     }
 
     /**
-     * adds the given amount the the bilanz double.
+     * adds the given amount the the balance double.
      * @param amount the amount to be added to the Account.
      */
     public void addMoney(double amount){
         if (amount < 1) {
             throw new IllegalStateException(amount + " ist keine gültiger Wert, die zahl muss grösser als 0 sein!");
         }
-        this.bilanz += amount;
+        this.balance += amount;
     }
 
     /**
      *
-     * removes the given amount the the bilanz double.
+     * removes the given amount the the balance double.
      * @param amount the amount to be removed from the Account.
      */
     public void takeMoney(double amount){
         if (amount < 1) {
             throw new IllegalStateException(amount + " ist keine gültiger Wert, die zahl muss grösser als 0 sein!");
         }
-        this.bilanz -= amount;
+        this.balance -= amount;
     }
 
     /**

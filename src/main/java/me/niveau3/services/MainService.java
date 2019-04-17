@@ -36,7 +36,7 @@ public class MainService extends AbstractProgram implements IStopable {
         this.shoppingCartService = new ShoppingCartService(this);
 
         this.bankService = new BankService(this);
-        this.accountManager = fileManager.load();
+        this.accountManager = fileManager.loadAccountManager();
 
         this.productManager = fileManager.loadProducts();
         this.productService = new ProductService(this);
@@ -83,15 +83,11 @@ public class MainService extends AbstractProgram implements IStopable {
                 System.out.println("invalid user input!");
                 break;
         }
+        fileManager.saveAccountManager();
+        fileManager.saveProducts();
     }
 
     public boolean isStop() {
         return stop;
-    }
-
-    @Override
-    public void stop() {
-        fileManager.save();
-        fileManager.saveProducts();
     }
 }

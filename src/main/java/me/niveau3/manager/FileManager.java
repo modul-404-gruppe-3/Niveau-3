@@ -5,7 +5,6 @@ import com.google.common.io.CharSink;
 import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
-import me.niveau3.manager.AccountManager;
 import me.niveau3.services.MainService;
 
 import java.io.File;
@@ -14,6 +13,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 
+/**
+ * This Manager manages all interactions with Files.
+ */
 public class FileManager {
     private MainService mainService;
 
@@ -21,7 +23,10 @@ public class FileManager {
         this.mainService = mainService;
     }
 
-    public void save() {
+    /**
+     * this Method is there to serialize the Account Manager class and write it into data.json.
+     */
+    public void saveAccountManager() {
         try {
             Reader initialReader = new StringReader(new Gson().toJson(mainService.getAccountManager()));
 
@@ -38,7 +43,9 @@ public class FileManager {
         }
     }
 
-
+    /**
+     * this Method is there to serialize the Product Manager class and write it into products.json.
+     */
     public void saveProducts() {
         try {
             Reader initialReader = new StringReader(new Gson().toJson(mainService.getProductManager()));
@@ -56,8 +63,11 @@ public class FileManager {
         }
     }
 
-
-    public AccountManager load() {
+    /**
+     * here will the JSON File data.json be loaded.
+     * @return the loaded AccountManager.
+     */
+    public AccountManager loadAccountManager() {
         try {
             AccountManager accountManager = new Gson().fromJson(Files.toString(new File("data.json"), Charsets.UTF_8), AccountManager.class);
 
@@ -68,6 +78,11 @@ public class FileManager {
         }
     }
 
+
+    /**
+     * here will the JSON File products.json be loaded.
+     * @return the loaded ProductManager.
+     */
     public ProductManager loadProducts() {
         try {
             ProductManager accountManager = new Gson().fromJson(Files.toString(new File("products.json"), Charsets.UTF_8), ProductManager.class);

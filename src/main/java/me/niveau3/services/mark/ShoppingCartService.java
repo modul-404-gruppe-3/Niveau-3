@@ -15,6 +15,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
     private MainService mainService;
     private static ShoppingCart noLoginCart;
 
+    /**
+     * @return checks if user is logged in and gets the right shopping cart.
+     */
     public ShoppingCart getCart() {
         return  (mainService.getBankService().getLoggedInAccount() == null)
                 ? noLoginCart
@@ -28,9 +31,11 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
     /**
      * this method will let you chose between removing products from the shopping cart and checking out.
+     * You Only can execute this service when there is a shopping cart with at least one item.
      */
     @Override
     public void execute() {
+        //verify for a valid account.
         if (getCart().getItems().values().size() <= 0) {
             System.out.println("es sind aktuell keine Items in ihrem Warenkorb.");
         }
@@ -50,6 +55,7 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
                 System.out.println("Dieser Account hat keine Items in seinem Warenkorb.");
             }
         }
+        //end verify for valid account.
 
         System.out.println("==================");
         System.out.println("     Warenkorb");
@@ -110,6 +116,6 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
         } else {
             System.out.println("invalid user input!");
         }
-        mainService.getFileManager().save();
+        mainService.getFileManager().saveAccountManager();
     }
 }

@@ -7,6 +7,9 @@ import me.niveau3.services.MainService;
 
 import java.util.List;
 
+/**
+ * A Collection of Methods that is used as help for PaymentMethods.
+ */
 public class PaymentUtils {
     /**
      * the method that will go to a account and take the money after verification.
@@ -43,6 +46,6 @@ public class PaymentUtils {
 
         account.takeMoney(amount);
 
-        System.out.println( amount + " wurde dem von ihnen angegeben account abgezogen. Restilche Billanz: " + account.getBilanz());
+        System.out.println( amount + " wurde dem von ihnen angegeben account abgezogen. Restilche Billanz: " + account.getBalance());
     }
 }

@@ -43,6 +43,6 @@ public class MarketService extends AbstractProgram implements IStopable {
                 System.out.println("invalid user input!");
                 break;
         }
-        mainService.getFileManager().save();
+        mainService.getFileManager().saveAccountManager();
     }
 }

@@ -4,7 +4,7 @@ import lombok.Getter;
 import me.niveau3.api.objects.Account;
 import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
-import me.niveau3.api.util.Hasher;
+import me.niveau3.api.util.PasswordHelper;
 import service.api.AbstractProgram;
 import service.api.IStopable;
 
@@ -28,7 +28,7 @@ public class BankService extends AbstractProgram implements IStopable {
     /**
      * This Method will be executed every time the Program gets started. This means that it will be executed every time
      * the Program in inits self will be started as well es every time a Action like see Bank balance is complete and the
-     * user choses not to stop the program via the stop command.
+     * user decides not to stop the program via the stop command.
      */
     @Override
     public void execute() {
@@ -83,7 +83,7 @@ public class BankService extends AbstractProgram implements IStopable {
             return;
         }
         System.out.println("Geben Sie das passwort an:");
-        String passwordhash = Hasher.getPBKDF(getScanner().next());
+        String passwordhash = PasswordHelper.getPBKDF(getScanner().next());
 
         if (passwordhash == null) {
             System.out.println("account erstellen abgeborchen.");
@@ -100,7 +100,7 @@ public class BankService extends AbstractProgram implements IStopable {
 
         mainService.getAccountManager().addAccount(new Account(startKapital, name), passwordhash);
         System.out.println("Account mit dem Namen " + name + " wurde erstellt!");
-        mainService.getFileManager().save();
+        mainService.getFileManager().saveAccountManager();
     }
 
     /**
@@ -139,14 +139,14 @@ public class BankService extends AbstractProgram implements IStopable {
             case "1":
                 System.out.println("Bitte geben sie eine Zahl ein:");
 
-                account.takeMoney(getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0  && account.getBilanz() - aDouble > 0));
+                account.takeMoney(getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0  && account.getBalance() - aDouble > 0));
                 break;
             case "2":
                 System.out.println("Bitte geben sie eine Zahl ein:");
                 account.addMoney(getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein!", aDouble -> aDouble > 0));
                 break;
             case "3":
-                System.out.println("sie haben Aktuell " + account.getBilanz() + " auf ihrem Konto!");
+                System.out.println("sie haben Aktuell " + account.getBalance() + " auf ihrem Konto!");
                 break;
             case "4":
                 System.out.println("geben sie den Namen des Accounts an auf den sie Geld überweisen wollen.");
@@ -160,7 +160,7 @@ public class BankService extends AbstractProgram implements IStopable {
 
                 Account targetAccount = mainService.getAccountManager().getAccount(targetAccountName);
                 System.out.println("geben sie bitte jetzt an, wie viel sie überweisen wollen.");
-                Double amount = getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0 && account.getBilanz() - aDouble > 0);
+                Double amount = getScanner().nextDouble("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!", aDouble -> aDouble > 0 && account.getBalance() - aDouble > 0);
 
 
                 if (amount == null) {
@@ -179,9 +179,13 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("erfolgreich abgemeldet.");
                 break;
         }
-        mainService.getFileManager().save();
+        mainService.getFileManager().saveAccountManager();
     }
 
+    /**
+     * TUI for logging into a Account.
+     * @return the account that will be logged into. null if there was a error or the User enters stop.
+     */
     public Account login() {
         System.out.println("Bitte geben sie den Namen ihres Accounts an.");
         String[] strings = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
@@ -209,10 +213,5 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("Anmeldung fehlgeschlagen");
             }
         }
-    }
-
-    @Override
-    public void stop() {
-        mainService.getFileManager().save();
     }
 }

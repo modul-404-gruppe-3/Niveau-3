@@ -17,9 +17,6 @@ public class Cash extends AbstractPaymentMethod {
         return "Bar";
     }
 
-    /**
-     * simply clears the shopping cart.
-     */
     @Override
     public void execute() {
         pay();

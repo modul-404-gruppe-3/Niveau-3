@@ -7,11 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
-public class Hasher {
-    /**
-     * a simple hasher for passwords etc.
-     * @return the hashed string
-     */
+/**
+ * This code will hash passwords and check if they compare.
+ */
+public class PasswordHelper {
     public static String getPBKDF(String password)
     {
         try {
@@ -28,6 +27,7 @@ public class Hasher {
             return null;
         }
     }
+
 
     private static byte[] getSalt() throws NoSuchAlgorithmException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");

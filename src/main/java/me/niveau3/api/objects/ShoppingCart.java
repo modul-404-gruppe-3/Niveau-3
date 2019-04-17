@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * this object is used to make it possible to theoretically have multiple shopping carts.
+ * this object is used to make it possible to have multiple shopping carts.
  * It serves as a List of ShoppingCartItems with additional Functionality.
  */
 public class ShoppingCart implements Serializable {

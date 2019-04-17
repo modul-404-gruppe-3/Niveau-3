@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simple Holder for ShoppingCartItem that will be paid via collective bill.
+ */
 @Getter
 @AllArgsConstructor
 public class Bill implements Serializable {

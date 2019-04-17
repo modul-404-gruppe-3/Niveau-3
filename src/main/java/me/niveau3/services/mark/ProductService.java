@@ -19,12 +19,16 @@ public class ProductService extends AbstractProgram implements IStopable {
         this.mainService = mainService;
     }
 
+    /**
+     * This Method will list all Products and lets you chose between products that you would wannt to add to your
+     * shopping cart.
+     */
     @Override
     public void execute() {
         for (Product product : mainService.getProductManager().getProducts().values()) {
             System.out.println("[" + product.getId()+ "] " + product.getName() + ", " + product.getPrice() + " CHF");
         }
-        
+
         System.out.println("Geben sie die Id des Objektes an das sie zum Warenkorb hinzufügen wollen.");
 
         System.out.println(String.join(" ", mainService.getProductManager().getProducts().keySet().stream()

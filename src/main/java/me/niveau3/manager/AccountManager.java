@@ -1,14 +1,15 @@
 package me.niveau3.manager;
 
 import me.niveau3.api.objects.Account;
-import me.niveau3.api.util.Hasher;
+import me.niveau3.api.util.PasswordHelper;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
 /**
- * Managing Accounts
+ * With this class you can manage all accounts.
+ * This class will be Serialized and written to JSON after every account changing thing.
  */
 public class AccountManager implements Serializable {
     private HashMap<String, Account> accounts;
@@ -25,17 +26,6 @@ public class AccountManager implements Serializable {
     public void addAccount(Account account, String passwordHash) {
         pwhashes.put(account.getName(), passwordHash);
         accounts.put(account.getName(), account);
-    }
-
-    /**
-     * removes account, if the given account does not exist, it will do nothing.
-     *
-     * @param account
-     */
-    public void removeAccount(String account) {
-        if (exists(account)) {
-            accounts.remove(account);
-        }
     }
 
     /**
@@ -71,9 +61,6 @@ public class AccountManager implements Serializable {
     }
 
     public boolean canLogin(String accountName, String password) {
-        return Hasher.validatePassword(password, pwhashes.get(accountName));
+        return PasswordHelper.validatePassword(password, pwhashes.get(accountName));
     }
-
-
-
 }
