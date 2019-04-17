@@ -1,12 +1,9 @@
 package me.niveau3;
 
-import com.google.common.io.CharSink;
-import com.google.common.io.FileWriteMode;
-import me.niveau3.objects.PaymentMethodManager;
-import me.niveau3.objects.ShoppingCart;
+import me.niveau3.manager.PaymentMethodManager;
 import me.niveau3.payment_methods.Cash;
 import me.niveau3.payment_methods.CreditCard;
-import me.niveau3.payment_methods.OnAccount;
+import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,11 +11,7 @@ import org.junit.jupiter.api.Test;
 import service.api.AbstractProgram;
 import service.api.MockScanner;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.nio.charset.Charset;
 
 public class MarkTests {
 
@@ -32,16 +25,16 @@ public class MarkTests {
 
         paymentMethodManager.register(new Cash(sut));
         paymentMethodManager.register(new CreditCard(sut));
-        paymentMethodManager.register(new OnAccount(sut));
+        paymentMethodManager.register(new CollectiveBill(sut));
     }
     @Test
     public void warenkorb_produkte_hinzufügen() {
 
-        AbstractProgram.scanner = new MockScanner(sut,
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "2", "1", "1", "4", "3",
                 "2", "1", "1", "6", "1",
                 "2", "1", "1", "1", "5",
-                "stop");
+                "stop"));
 
         sut.run();
 

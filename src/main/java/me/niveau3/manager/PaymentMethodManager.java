@@ -1,4 +1,4 @@
-package me.niveau3.objects;
+package me.niveau3.manager;
 
 import me.niveau3.api.AbstractPaymentMethod;
 

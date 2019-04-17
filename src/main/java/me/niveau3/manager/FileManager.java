@@ -1,10 +1,11 @@
-package me.niveau3.objects;
+package me.niveau3.manager;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharSink;
 import com.google.common.io.FileWriteMode;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
+import me.niveau3.manager.AccountManager;
 import me.niveau3.services.MainService;
 
 import java.io.File;

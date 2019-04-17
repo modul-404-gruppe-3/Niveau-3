@@ -1,11 +1,10 @@
 package me.niveau3;
 
-import me.niveau3.objects.PaymentMethodManager;
+import me.niveau3.manager.PaymentMethodManager;
 import me.niveau3.payment_methods.Cash;
 import me.niveau3.payment_methods.CreditCard;
-import me.niveau3.payment_methods.OnAccount;
+import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
-import me.niveau3.util.Hasher;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,13 +23,13 @@ public class AccountTests {
 
         paymentMethodManager.register(new Cash(sut));
         paymentMethodManager.register(new CreditCard(sut));
-        paymentMethodManager.register(new OnAccount(sut));
+        paymentMethodManager.register(new CollectiveBill(sut));
     }
 
     @Test
     public void test_account_creation() {
-        AbstractProgram.scanner = new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop");
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0", "stop"));
 
         sut.run();
 
@@ -39,8 +38,8 @@ public class AccountTests {
 
     @Test
     public void test_account_valid_login() {
-        AbstractProgram.scanner = new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop");
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0", "stop"));
 
         sut.run();
 
@@ -49,8 +48,8 @@ public class AccountTests {
 
     @Test
     public void test_account_invalid_login() {
-        AbstractProgram.scanner = new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop");
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0", "stop"));
 
         sut.run();
 
@@ -59,10 +58,10 @@ public class AccountTests {
 
     @Test
     public void test_account_add_money() {
-        AbstractProgram.scanner = new MockScanner(sut,
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0",
                 "1", "2","g", "123", "2", "100",
-                "stop");
+                "stop"));
 
         sut.run();
 
@@ -71,10 +70,10 @@ public class AccountTests {
 
     @Test
     public void test_account_remove_money() {
-        AbstractProgram.scanner = new MockScanner(sut,
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0",
                 "1", "2","g", "123", "1", "100",
-                "stop");
+                "stop"));
 
         sut.run();
 
@@ -83,11 +82,11 @@ public class AccountTests {
 
     @Test
     public void test_account_transaction() {
-        AbstractProgram.scanner = new MockScanner(sut,
+        AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0",
                 "1", "1", "g2", "321", "1000.0",
                 "1", "2","g", "123", "4", "g2","100",
-                "stop");
+                "stop"));
 
         sut.run();
 

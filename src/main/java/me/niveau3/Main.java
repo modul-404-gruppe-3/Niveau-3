@@ -2,9 +2,9 @@ package me.niveau3;
 
 import me.niveau3.payment_methods.Cash;
 import me.niveau3.payment_methods.CreditCard;
-import me.niveau3.payment_methods.OnAccount;
+import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
-import me.niveau3.objects.PaymentMethodManager;
+import me.niveau3.manager.PaymentMethodManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,6 +21,6 @@ public class Main {
 
         paymentMethodManager.register(new Cash(mainService));
         paymentMethodManager.register(new CreditCard(mainService));
-        paymentMethodManager.register(new OnAccount(mainService));
+        paymentMethodManager.register(new CollectiveBill(mainService));
     }
 }

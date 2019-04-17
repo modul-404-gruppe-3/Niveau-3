@@ -1,7 +1,6 @@
 package me.niveau3.api;
 
 import lombok.Getter;
-import me.niveau3.objects.ShoppingCart;
 import me.niveau3.services.MainService;
 import service.api.IScanner;
 
@@ -22,9 +21,8 @@ public abstract class AbstractPaymentMethod {
      */
     public abstract String getDisplayName();
 
-    /**
-     * this method will be executed when ever you need to pay something with the given payment method.
-     * @param scanner
-     */
-    public abstract void execute(IScanner scanner);
+
+    public abstract void execute();
+
+    public abstract void pay();
 }

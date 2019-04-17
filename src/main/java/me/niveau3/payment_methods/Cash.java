@@ -21,7 +21,12 @@ public class Cash extends AbstractPaymentMethod {
      * simply clears the shopping cart.
      */
     @Override
-    public void execute(IScanner scanner) {
+    public void execute() {
+        pay();
+    }
+
+    @Override
+    public void pay() {
         getMainService().getShoppingCartService().getCart().clear();
     }
 }

@@ -1,4 +1,4 @@
-package me.niveau3.util;
+package me.niveau3.api.util;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

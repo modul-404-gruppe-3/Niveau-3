@@ -1,6 +1,7 @@
-package me.niveau3.objects;
+package me.niveau3.manager;
 
-import me.niveau3.util.Hasher;
+import me.niveau3.api.objects.Account;
+import me.niveau3.api.util.Hasher;
 
 import java.io.Serializable;
 import java.util.HashMap;

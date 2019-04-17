@@ -1,12 +1,11 @@
 package me.niveau3.services.bank;
 
 import lombok.Getter;
-import me.niveau3.objects.Account;
-import me.niveau3.payment_methods.OnAccount;
+import me.niveau3.api.objects.Account;
+import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
-import me.niveau3.util.Hasher;
+import me.niveau3.api.util.Hasher;
 import service.api.AbstractProgram;
-import service.api.IScanner;
 import service.api.IStopable;
 
 /**
@@ -169,7 +168,7 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("Du hast " + targetAccountName + " " + amount + " überwiesen.");
                 break;
             case "5":
-                OnAccount.getInstance().pay();
+                CollectiveBill.getInstance().pay();
                 break;
             case "6":
                 loggedInAccount =null;
@@ -205,5 +204,10 @@ public class BankService extends AbstractProgram implements IStopable {
                 System.out.println("Anmeldung fehlgeschlagen");
             }
         }
+    }
+
+    @Override
+    public void stop() {
+        mainService.getFileManager().save();
     }
 }

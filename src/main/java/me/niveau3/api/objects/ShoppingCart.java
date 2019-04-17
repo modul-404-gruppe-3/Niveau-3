@@ -1,4 +1,4 @@
-package me.niveau3.objects;
+package me.niveau3.api.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

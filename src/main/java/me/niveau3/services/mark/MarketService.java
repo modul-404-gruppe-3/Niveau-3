@@ -44,4 +44,8 @@ public class MarketService extends AbstractProgram implements IStopable {
                 break;
         }
     }
+    @Override
+    public void stop() {
+        mainService.getFileManager().save();
+    }
 }

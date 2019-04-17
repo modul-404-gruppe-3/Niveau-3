@@ -1,8 +1,8 @@
 package me.niveau3.services.mark;
 
 import me.niveau3.api.AbstractPaymentMethod;
-import me.niveau3.objects.ShoppingCart;
-import me.niveau3.payment_methods.OnAccount;
+import me.niveau3.api.objects.ShoppingCart;
+import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
 import service.api.AbstractProgram;
 import service.api.IStopable;
@@ -84,10 +84,10 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
 
             double ammount = mainService.getShoppingCartService().getCart().getTotalAmount();
 
-            method.execute(getScanner());
+            method.execute();
 
 
-            if (!(method instanceof OnAccount)) {
+            if (!(method instanceof CollectiveBill)) {
                 System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ ammount +" CHF)");
             }else {
                 System.out.println("Bestellung auf rechnung hinzugefügt. (" + ammount + " CHF)");
@@ -95,5 +95,10 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
         } else {
             System.out.println("invalid user input!");
         }
+    }
+
+    @Override
+    public void stop() {
+        mainService.getFileManager().save();
     }
 }

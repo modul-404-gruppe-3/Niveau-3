@@ -1,7 +1,7 @@
 package me.niveau3.services.mark;
 
 import lombok.Getter;
-import me.niveau3.objects.Product;
+import me.niveau3.api.objects.Product;
 import me.niveau3.services.MainService;
 import service.api.AbstractProgram;
 import service.api.IStopable;
