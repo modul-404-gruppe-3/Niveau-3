@@ -25,8 +25,7 @@ public class MarketTests {
         paymentMethodManager.register(new CreditCard(sut));
         paymentMethodManager.register(new CollectiveBill(sut));
     }
-
-
+    
     @Test
     public void warenkorb_produkte_hinzufügen_ohne_account() {
 

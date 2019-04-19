@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.api.AbstractProgram;
+import service.api.InvalidScannerOutputException;
 import service.api.MockScanner;
 
 public class CheckOutTests {
@@ -27,18 +28,32 @@ public class CheckOutTests {
     }
 
     @Test
-    public void checkout_bar() {
+    public void checkout_with_no_items_in_basket() {
+        String message = Assertions.assertThrows(InvalidScannerOutputException.class,
+                () -> {
+                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                            "2", "2", "2",
+                            "stop"));
+                    sut.run();
+                },
+                "This should throw a exception because '2' is not a valid account and " +
+                        "there is a account needed to show the basket of a account with items.")
+                .getMessage();
 
+        Assertions.assertTrue(message.startsWith("2"));
+        Assertions.assertTrue(message.endsWith("Bitte geben einen Account an der existiert und genug geld auf dem Konto hat."));
+    }
+
+    @Test
+    public void checkout_bar() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "2", "1", "4", "3",
                 "2", "2", "2", "1",
                 "stop"));
-
         sut.run();
 
         Assertions.assertEquals(0, sut.getShoppingCartService().getCart().getTotalAmount());
     }
-
 
     @Test
     public void checkout_kreditkarte() {
@@ -71,7 +86,6 @@ public class CheckOutTests {
         Assertions.assertEquals(3, CollectiveBill.getNoLoginBill().getItems().get(0).getAmount());
         Assertions.assertEquals(4, CollectiveBill.getNoLoginBill().getItems().get(0).getProduct().getId());
     }
-
 
     @Test
     public void checkout_auf_sammelrechnung_mit_account() {

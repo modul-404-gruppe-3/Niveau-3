@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.api.AbstractProgram;
+import service.api.InvalidScannerOutputException;
 import service.api.MockScanner;
 
 public class AccountTests {
@@ -34,6 +35,22 @@ public class AccountTests {
         sut.run();
 
         Assertions.assertNotNull(sut.getAccountManager().getAccount("g"));
+    }
+
+    @Test
+    public void test_invalid_start_capital() {
+        String message = Assertions.assertThrows(InvalidScannerOutputException.class,
+                () -> {
+                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                            "1", "g", "123", "xyz", //create account
+                            "stop"));
+                    sut.run();
+                },
+                "This should throw a exception because 'xyz' is not a valid double.")
+                .getMessage();
+
+        Assertions.assertTrue(message.startsWith("xyz"));
+        Assertions.assertTrue(message.endsWith("Bitte geben sie eine Valide Zahl grösser oder gleich 0 ein!"));
     }
 
     @Test
@@ -69,6 +86,24 @@ public class AccountTests {
     }
 
     @Test
+    public void test_account_add_invalid_amount_of_money() {
+        String message = Assertions.assertThrows(InvalidScannerOutputException.class,
+                () -> {
+                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                            "1", "g", "123", "1000.0",
+                            "1", "2","g", "123", "2", "-100",
+                            "stop"));
+
+                    sut.run();
+                },
+                "This should throw a exception because '-100' is not a valid amount.")
+                .getMessage();
+
+        Assertions.assertTrue(message.startsWith("-100.0"));
+        Assertions.assertTrue(message.endsWith("Bitte geben sie eine Valide Zahl grösser als 0 ein!"));
+    }
+
+    @Test
     public void test_account_remove_money() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0",
@@ -78,6 +113,24 @@ public class AccountTests {
         sut.run();
 
         Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBalance());
+    }
+
+    @Test
+    public void test_account_remove_invalid_amount_of_money() {
+        String message = Assertions.assertThrows(InvalidScannerOutputException.class,
+                () -> {
+                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                            "1", "g", "123", "1000.0",
+                            "1", "2","g", "123", "1", "1100.0",
+                            "stop"));
+
+                    sut.run();
+                },
+                "This should throw a exception because '1100' is a to big number.")
+                .getMessage();
+
+        Assertions.assertTrue(message.startsWith("1100.0"));
+        Assertions.assertTrue(message.endsWith("Bitte geben sie eine Valide Zahl grösser als 0 ein, deren Betrag sie besitzen!"));
     }
 
     @Test
@@ -93,4 +146,5 @@ public class AccountTests {
         Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBalance());
         Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g2").getBalance());
     }
+
 }
