@@ -30,7 +30,7 @@ public class MarketTests {
     public void warenkorb_produkte_hinzufügen_ohne_account() {
 
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "2", "1", "4", "3", //produkt hinzufügen
+                "2", "1", "4", "3", "stop", //produkt hinzufügen
                 "stop"));
 
         sut.run();
@@ -43,9 +43,8 @@ public class MarketTests {
 
         AbstractProgram.setStaticScanner(new MockScanner(sut,
                 "1", "g", "123", "1000", //create account
-                "1", "2", "g", "123", "stop", //anmelden
-
-                "2", "1", "4", "3", //produkt hinzufügen
+                "2", "g", "123", "stop", "stop",//anmelden
+                "2", "1", "4", "3",  "stop",//produkt hinzufügen
                 "stop"));
 
         sut.run();

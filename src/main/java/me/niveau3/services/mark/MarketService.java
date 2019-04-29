@@ -2,14 +2,14 @@ package me.niveau3.services.mark;
 
 import lombok.Getter;
 import me.niveau3.services.MainService;
-import service.api.AbstractProgram;
-import service.api.IStopable;
+import service.api.AbstractRunContinously;
+import service.api.IScanner;
 
 /**
  * The main service for all market activity
  */
 @Getter
-public class MarketService extends AbstractProgram implements IStopable {
+public class MarketService extends AbstractRunContinously {
     private MainService mainService;
 
     public MarketService(MainService mainService) {
@@ -25,8 +25,8 @@ public class MarketService extends AbstractProgram implements IStopable {
         System.out.println("[1] Produktliste anzeigen");
         System.out.println("[2] Warenkorb anzeigen");
         System.out.println("[stop] Zum hauptmenü zurück");
-        String input = getScanner().next("Bitte gebe eine Valide aktion an!", "1", "2");
-
+        IScanner scanner = getScanner();
+        String input = scanner.next("Bitte gebe eine Valide aktion an!", "1", "2");
         if (input == null) {
             System.out.println("Kehre zum Hauptmenü zurück");
             return;

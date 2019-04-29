@@ -12,6 +12,7 @@ import service.api.AbstractProgram;
 import service.api.InvalidScannerOutputException;
 import service.api.MockScanner;
 
+
 public class AccountTests {
 
     private MainService sut;
@@ -30,7 +31,8 @@ public class AccountTests {
     @Test
     public void test_account_creation() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop"));
+                "1", "g", "123", "1000.0", "stop",
+                "stop"));
 
         sut.run();
 
@@ -42,8 +44,8 @@ public class AccountTests {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
                     AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "1", "g", "123", "xyz", //create account
-                            "stop"));
+                            "1", "g", "123", "xyz")); //create account
+
                     sut.run();
                 },
                 "This should throw a exception because 'xyz' is not a valid double.")
@@ -56,7 +58,8 @@ public class AccountTests {
     @Test
     public void test_account_valid_login() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop"));
+                "1", "g", "123", "1000.0", "stop",
+                "stop"));
 
         sut.run();
 
@@ -66,7 +69,8 @@ public class AccountTests {
     @Test
     public void test_account_invalid_login() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop"));
+                "1", "g", "123", "1000.0", "stop",
+                "stop"));
 
         sut.run();
 
@@ -76,8 +80,8 @@ public class AccountTests {
     @Test
     public void test_account_add_money() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0",
-                "1", "2","g", "123", "2", "100",
+                "1", "g", "123", "1000.0", "stop",
+                "1", "2","g", "123", "2", "100", "stop",
                 "stop"));
 
         sut.run();
@@ -90,9 +94,8 @@ public class AccountTests {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
                     AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "1", "g", "123", "1000.0",
-                            "1", "2","g", "123", "2", "-100",
-                            "stop"));
+                            "1", "g", "123", "1000.0", "stop",
+                            "1", "2","g", "123", "2", "-100"));
 
                     sut.run();
                 },
@@ -106,8 +109,8 @@ public class AccountTests {
     @Test
     public void test_account_remove_money() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0",
-                "1", "2","g", "123", "1", "100",
+                "1", "g", "123", "1000.0", "stop",
+                "1", "2","g", "123", "1", "100", "stop",
                 "stop"));
 
         sut.run();
@@ -120,9 +123,8 @@ public class AccountTests {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
                     AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "1", "g", "123", "1000.0",
-                            "1", "2","g", "123", "1", "1100.0",
-                            "stop"));
+                            "1", "g", "123", "1000.0", "stop",
+                            "1", "2","g", "123", "1", "1100.0"));
 
                     sut.run();
                 },
@@ -136,9 +138,9 @@ public class AccountTests {
     @Test
     public void test_account_transaction() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0",
-                "1", "1", "g2", "321", "1000.0",
-                "1", "2","g", "123", "4", "g2","100",
+                "1", "g", "123", "1000.0", "stop",
+                "1", "1", "g2", "321", "1000.0", "stop",
+                "1", "2","g", "123", "4", "g2","100", "stop",
                 "stop"));
 
         sut.run();
@@ -146,5 +148,4 @@ public class AccountTests {
         Assertions.assertEquals(900.0, sut.getAccountManager().getAccount("g").getBalance());
         Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g2").getBalance());
     }
-
 }

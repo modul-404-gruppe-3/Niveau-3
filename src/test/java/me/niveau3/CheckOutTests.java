@@ -32,8 +32,7 @@ public class CheckOutTests {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
                     AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "2", "2", "2",
-                            "stop"));
+                            "2", "2", "2"));
                     sut.run();
                 },
                 "This should throw a exception because '2' is not a valid account and " +
@@ -47,8 +46,8 @@ public class CheckOutTests {
     @Test
     public void checkout_bar() {
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "2", "1", "4", "3",
-                "2", "2", "2", "1",
+                "2", "1", "4", "3", "stop",
+                "2", "2", "2", "1", "stop",
                 "stop"));
         sut.run();
 
@@ -57,12 +56,11 @@ public class CheckOutTests {
 
     @Test
     public void checkout_kreditkarte() {
-
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000", //create account
-                "2", "1", "4", "3", //add product
-                "2", "2", "2", "2", //Zahlung mit Karte auswählen
-                "g", "123", //Benutzerdaten für verifizierung eingeben.
+                "1", "g", "123", "1000", "stop", //create account
+                "2", "1", "4", "3", "stop", //add product
+                "2", "2", "2", "2", "stop", //Zahlung mit Karte auswählen
+                "g", "123", "stop", //Benutzerdaten für verifizierung eingeben.
                 "stop"));
         sut.run();
 
@@ -74,8 +72,8 @@ public class CheckOutTests {
     public void checkout_auf_sammelrechnung_ohne_account() {
 
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "2", "1", "4", "3", //add product
-                "2", "2", "2", "3", //Zahlung auf rechnung veranlassen
+                "2", "1", "4", "3", "stop", //add product
+                "2", "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
                 "stop"));
         sut.run();
 
@@ -91,10 +89,10 @@ public class CheckOutTests {
     public void checkout_auf_sammelrechnung_mit_account() {
 
         AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000", //create account
-                "1", "2", "g", "123", "stop", //anmelden
-                "2", "1", "4", "3", //add product
-                "2", "2", "2", "3", //Zahlung auf rechnung veranlassen
+                "1", "g", "123", "1000", "stop", //create account
+                "1", "2", "g", "123", "stop", "stop", //anmelden
+                "2", "1", "4", "3", "stop", //add product
+                "2", "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
                 "stop"));
         sut.run();
 

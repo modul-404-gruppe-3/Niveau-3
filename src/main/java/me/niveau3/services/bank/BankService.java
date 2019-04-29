@@ -5,8 +5,7 @@ import me.niveau3.api.objects.Account;
 import me.niveau3.payment_methods.CollectiveBill;
 import me.niveau3.services.MainService;
 import me.niveau3.api.util.PasswordHelper;
-import service.api.AbstractProgram;
-import service.api.IStopable;
+import service.api.AbstractRunContinously;
 
 /**
  * the main class behind the account system, this class is most responsible for the Gui part and it will call more low
@@ -16,7 +15,7 @@ import service.api.IStopable;
  * handle multiple Users at once.
  */
 @Getter
-public class BankService extends AbstractProgram implements IStopable {
+public class BankService extends AbstractRunContinously {
     boolean stop = false;
     private MainService mainService;
     private Account loggedInAccount;

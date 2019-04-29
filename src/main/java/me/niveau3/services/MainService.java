@@ -9,19 +9,17 @@ import me.niveau3.services.bank.BankService;
 import me.niveau3.services.mark.MarketService;
 import me.niveau3.services.mark.ProductService;
 import me.niveau3.services.mark.ShoppingCartService;
-import service.api.AbstractProgram;
-import service.api.IStopable;
+import service.api.AbstractRunContinously;
 
 /**
  * this is the main service that manages all other services and holds most of the managers and services in it.
  */
 @Getter
-public class MainService extends AbstractProgram implements IStopable {
+public class MainService extends AbstractRunContinously  {
     private MarketService marketService;
     private PaymentMethodManager paymentMethodManager;
     private ShoppingCartService shoppingCartService;
     private ProductService productService;
-    private boolean stop;
     private AccountManager accountManager;
     private BankService bankService;
     private FileManager fileManager;
@@ -30,7 +28,6 @@ public class MainService extends AbstractProgram implements IStopable {
 
     public MainService(boolean writeToFile) {
         this.writeToFile = writeToFile;
-        this.stop = false;
 
         this.fileManager = new FileManager(this);
 
@@ -46,16 +43,6 @@ public class MainService extends AbstractProgram implements IStopable {
         this.paymentMethodManager = new PaymentMethodManager();
     }
 
-
-    /**
-     * this method is used in the psvm to make it that the program does not stop after 1 action.
-     */
-    public void run() {
-        while (!this.isStop()) {
-            this.execute();
-        }
-    }
-
     /**
      * this method will let you chose between starting the market service and the account service.
      */
@@ -69,17 +56,16 @@ public class MainService extends AbstractProgram implements IStopable {
         String input = getScanner().next("Bitte geben sie eine Valide Option an!","1", "2");
 
         if (input == null) {
-            this.stop = true;
             System.out.println("Programm wird beendet.");
             return;
         }
 
         switch (input) {
             case "1":
-                this.bankService.execute();
+                this.bankService.run();
                 break;
             case "2":
-                this.marketService.execute();
+                this.marketService.run();
                 break;
             default:
                 System.out.println("invalid user input!");
@@ -87,9 +73,5 @@ public class MainService extends AbstractProgram implements IStopable {
         }
         fileManager.saveAccountManager();
         fileManager.saveProducts();
-    }
-
-    public boolean isStop() {
-        return stop;
     }
 }
