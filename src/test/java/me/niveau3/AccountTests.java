@@ -30,7 +30,7 @@ public class AccountTests {
 
     @Test
     public void test_account_creation() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0", "stop",
                 "stop"));
 
@@ -43,7 +43,7 @@ public class AccountTests {
     public void test_invalid_start_capital() {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
-                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                    AbstractProgram.setCurrentScanner(new MockScanner(sut,
                             "1", "g", "123", "xyz")); //create account
 
                     sut.run();
@@ -51,13 +51,14 @@ public class AccountTests {
                 "This should throw a exception because 'xyz' is not a valid double.")
                 .getMessage();
 
+        System.out.println("b: "+message);
         Assertions.assertTrue(message.startsWith("xyz"));
         Assertions.assertTrue(message.endsWith("Bitte geben sie eine Valide Zahl grösser oder gleich 0 ein!"));
     }
 
     @Test
     public void test_account_valid_login() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0", "stop",
                 "stop"));
 
@@ -68,7 +69,7 @@ public class AccountTests {
 
     @Test
     public void test_account_invalid_login() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "1", "g", "123", "1000.0", "stop",
                 "stop"));
 
@@ -79,12 +80,14 @@ public class AccountTests {
 
     @Test
     public void test_account_add_money() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop",
-                "1", "2","g", "123", "2", "100", "stop",
-                "stop"));
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0",
+                "2","g", "123", "2", "100", "stop",
+                "stop", "stop"));
 
         sut.run();
+
+        System.out.println(String.join(" ", sut.getAccountManager().getAccountNames()));
 
         Assertions.assertEquals(1100.0, sut.getAccountManager().getAccount("g").getBalance());
     }
@@ -93,9 +96,10 @@ public class AccountTests {
     public void test_account_add_invalid_amount_of_money() {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
-                    AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "1", "g", "123", "1000.0", "stop",
-                            "1", "2","g", "123", "2", "-100"));
+                    AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                            "1", "g", "123", "1000.0",
+                            "2","g", "123", "2", "-100",
+                            "stop", "stop"));
 
                     sut.run();
                 },
@@ -108,10 +112,10 @@ public class AccountTests {
 
     @Test
     public void test_account_remove_money() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop",
-                "1", "2","g", "123", "1", "100", "stop",
-                "stop"));
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0",
+                "2","g", "123", "1", "100",
+                "stop", "stop", "stop"));
 
         sut.run();
 
@@ -122,9 +126,10 @@ public class AccountTests {
     public void test_account_remove_invalid_amount_of_money() {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
-                    AbstractProgram.setStaticScanner(new MockScanner(sut,
-                            "1", "g", "123", "1000.0", "stop",
-                            "1", "2","g", "123", "1", "1100.0"));
+                    AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                            "1", "g", "123", "1000.0",
+                            "2","g", "123", "1", "1100.0",
+                            "stop", "stop"));
 
                     sut.run();
                 },
@@ -137,11 +142,11 @@ public class AccountTests {
 
     @Test
     public void test_account_transaction() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000.0", "stop",
-                "1", "1", "g2", "321", "1000.0", "stop",
-                "1", "2","g", "123", "4", "g2","100", "stop",
-                "stop"));
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "1", "g", "123", "1000.0",
+                "1", "g2", "321", "1000.0",
+                "2","g", "123", "4", "g2","100", "stop",
+                "stop", "stop"));
 
         sut.run();
 

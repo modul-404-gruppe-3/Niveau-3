@@ -41,7 +41,8 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
         }
         if (mainService.getBankService().getLoggedInAccount() == null) {
             System.out.println("Sie sind Aktuell nicht angemeldet und haben keine Items in ihrem Warenkorb.");
-            System.out.println("Sie können sich nun Anmelden, oder 'stop' eingeben um den Prozess abzubrechen.");
+            System.out.println("Sie können sich nun Anmelden, um ihrem persöndlichen Warenkorb zu sehen, " +
+                    "oder 'stop' eingeben um zum hauptmenü zurück zu kommen.");
         }
 
         while (getCart().getItems().values().size() <= 0) {
@@ -106,9 +107,9 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
                 System.out.println("[" + indexesAsString + "] " + mainService.getPaymentMethodManager().get(indexesAsString).getDisplayName());
             }
 
-            String m = getScanner().next("Bitte geben sie eine Valide Zahlungsart an.", mainService.getPaymentMethodManager().getIndexesAsStrings().toArray(new String[0]));
+            String paymentMethod = getScanner().next("Bitte geben sie eine Valide Zahlungsart an.", mainService.getPaymentMethodManager().getIndexesAsStrings().toArray(new String[0]));
 
-            AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(m);
+            AbstractPaymentMethod method = mainService.getPaymentMethodManager().get(paymentMethod);
 
             double amount = mainService.getShoppingCartService().getCart().getTotalAmount();
 
@@ -121,6 +122,8 @@ public class ShoppingCartService extends AbstractProgram implements IStopable {
                 System.out.println("Zahlung abgeschlossen! (" + method.getDisplayName()+ ", "+ amount +" CHF)");
             }else {
                 System.out.println("Bestellung zur Rechnung hinzugefügt. (" + amount + " CHF)");
+                System.out.println("Items wurden aus ihrem Warenkorb entfernt.");
+                System.out.println("====================================");
             }
             //</editor-fold>
         } else {

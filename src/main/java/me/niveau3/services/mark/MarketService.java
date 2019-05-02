@@ -23,7 +23,7 @@ public class MarketService extends AbstractRunContinously {
     public void execute() {
         System.out.println("Bitte wähle eine Aktion aus:");
         System.out.println("[1] Produktliste anzeigen");
-        System.out.println("[2] Warenkorb anzeigen");
+        System.out.println("[2] Warenkorb verwalten");
         System.out.println("[stop] Zum hauptmenü zurück");
         IScanner scanner = getScanner();
         String input = scanner.next("Bitte gebe eine Valide aktion an!", "1", "2");
@@ -34,10 +34,10 @@ public class MarketService extends AbstractRunContinously {
 
         switch (input) {
             case "1":
-                this.mainService.getProductService().execute();
+                this.mainService.getProductService().run();
                 break;
             case "2":
-                this.mainService.getShoppingCartService().execute();
+                this.mainService.getShoppingCartService().run();
                 break;
             default:
                 System.out.println("invalid user input!");

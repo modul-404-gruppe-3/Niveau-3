@@ -31,7 +31,7 @@ public class CheckOutTests {
     public void checkout_with_no_items_in_basket() {
         String message = Assertions.assertThrows(InvalidScannerOutputException.class,
                 () -> {
-                    AbstractProgram.setStaticScanner(new MockScanner(sut,
+                    AbstractProgram.setCurrentScanner(new MockScanner(sut,
                             "2", "2", "2"));
                     sut.run();
                 },
@@ -45,10 +45,10 @@ public class CheckOutTests {
 
     @Test
     public void checkout_bar() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "2", "1", "4", "3", "stop",
-                "2", "2", "2", "1", "stop",
-                "stop"));
+                "2", "2", "1", "stop",
+                "stop", "stop"));
         sut.run();
 
         Assertions.assertEquals(0, sut.getShoppingCartService().getCart().getTotalAmount());
@@ -56,12 +56,12 @@ public class CheckOutTests {
 
     @Test
     public void checkout_kreditkarte() {
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000", "stop", //create account
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "1", "g", "123", "1000", //create account
+                "2", "g", "123", "stop", "stop", //login
                 "2", "1", "4", "3", "stop", //add product
                 "2", "2", "2", "2", "stop", //Zahlung mit Karte auswählen
-                "g", "123", "stop", //Benutzerdaten für verifizierung eingeben.
-                "stop"));
+                "stop", "stop"));
         sut.run();
 
         Assertions.assertEquals(0, sut.getShoppingCartService().getCart().getTotalAmount());
@@ -70,11 +70,10 @@ public class CheckOutTests {
 
     @Test
     public void checkout_auf_sammelrechnung_ohne_account() {
-
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "2", "1", "4", "3", "stop", //add product
-                "2", "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
-                "stop"));
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "2","1", "4", "3","stop", //add product
+                 "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
+                "stop", "stop"));
         sut.run();
 
         Assertions.assertEquals(0, sut.getShoppingCartService().getCart().getItems().values().size());
@@ -88,11 +87,11 @@ public class CheckOutTests {
     @Test
     public void checkout_auf_sammelrechnung_mit_account() {
 
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
-                "1", "g", "123", "1000", "stop", //create account
-                "1", "2", "g", "123", "stop", "stop", //anmelden
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
+                "1", "g", "123", "1000", //create account
+                 "2", "g", "123", "stop", "stop", //anmelden
                 "2", "1", "4", "3", "stop", //add product
-                "2", "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
+                "2", "2", "3", "stop", //Zahlung auf rechnung veranlassen
                 "stop"));
         sut.run();
 

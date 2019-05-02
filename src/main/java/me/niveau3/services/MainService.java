@@ -5,6 +5,7 @@ import me.niveau3.manager.AccountManager;
 import me.niveau3.manager.FileManager;
 import me.niveau3.manager.PaymentMethodManager;
 import me.niveau3.manager.ProductManager;
+import me.niveau3.services.bank.AccountOverviewService;
 import me.niveau3.services.bank.BankService;
 import me.niveau3.services.mark.MarketService;
 import me.niveau3.services.mark.ProductService;
@@ -24,6 +25,7 @@ public class MainService extends AbstractRunContinously  {
     private BankService bankService;
     private FileManager fileManager;
     private ProductManager productManager;
+    private AccountOverviewService accountOverviewService;
     private boolean writeToFile;
 
     public MainService(boolean writeToFile) {
@@ -41,6 +43,8 @@ public class MainService extends AbstractRunContinously  {
         this.productService = new ProductService(this);
 
         this.paymentMethodManager = new PaymentMethodManager();
+
+        this.accountOverviewService = new AccountOverviewService(this);
     }
 
     /**

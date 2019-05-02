@@ -18,7 +18,7 @@ public class PasswordHelper {
     public static String getPBKDF(String password)
     {
         try {
-            int iterations = 1000;
+            int iterations = 100000;
             char[] chars = password.toCharArray();
             byte[] salt = getSalt();
 

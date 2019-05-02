@@ -29,9 +29,9 @@ public class MarketTests {
     @Test
     public void warenkorb_produkte_hinzufügen_ohne_account() {
 
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "2", "1", "4", "3", "stop", //produkt hinzufügen
-                "stop"));
+                "stop", "stop"));
 
         sut.run();
 
@@ -41,11 +41,11 @@ public class MarketTests {
     @Test
     public void warenkorb_produkte_hinzufügen_mit_account() {
 
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "1", "g", "123", "1000", //create account
-                "2", "g", "123", "stop", "stop",//anmelden
+                "2", "g", "123", "stop", "stop", //anmelden
                 "2", "1", "4", "3",  "stop",//produkt hinzufügen
-                "stop"));
+                "stop", "stop"));
 
         sut.run();
 
@@ -55,12 +55,12 @@ public class MarketTests {
     @Test
     public void warenkorb_produkte_entfernen_ohne_account() {
 
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "2", "1", "4", "3", //add to cart
-                "2", "1", "6", "1", //add to cart
-                "2", "1", "1", "5", //add to cart
-                "2", "2", "1", "0", //remove from cart
-                "stop"));
+                "6", "1", //add to cart
+                "1", "5", "stop", //add to cart
+                "2", "1", "0", //remove from cart
+                "stop", "stop", "stop"));
 
         sut.run();
 
@@ -70,15 +70,14 @@ public class MarketTests {
     @Test
     public void warenkorb_produkte_entfernen_mit_account() {
 
-        AbstractProgram.setStaticScanner(new MockScanner(sut,
+        AbstractProgram.setCurrentScanner(new MockScanner(sut,
                 "1", "g", "123", "1000", //create account
-                "1", "2", "g", "123", "stop", //anmelden
-
+                "2", "g", "123", "stop","stop", //anmelden
                 "2", "1", "4", "3", //add to cart
-                "2", "1", "6", "1", //add to cart
-                "2", "1", "1", "5", //add to cart
-                "2", "2", "1", "0", //remove from cart
-                "stop"));
+                "6", "1", //add to cart
+                "1", "5","stop", //add to cart
+                "2", "1", "0", //remove from cart
+                "stop", "stop", "stop"));
 
         sut.run();
 
