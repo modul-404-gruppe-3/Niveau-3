@@ -1,22 +1,2 @@
-# Aufgabenstellungen zu den Kompetenzen Niveau 3 
-*(eigene aufgabenstellung)*
-
-## 1. Aufgabe – Bestellsystem
-- Unterschiedliche Waren bestellbar aus Katalog
-- Items sollen in einem einzelnen Warenkorb sein
-- Man soll angeben können, wie viel man von jedem Artikel haben will
-- Mehrere Artikel auf einmal bestellbar
-- Summe einer Bestellung wird berechnet
-- Mehrere Bezahlmöglichkeiten (Kontozahlung, Barzahlung, Rechnung)
-
-## 2.	Aufgabe – Bankensystem mit Login und Passwortsicherheit
-- Login (mit Passwortmatch)
-- Bankaccount 
-- Geld 
-  - Abheben
-  - Hinzufügen
-  - Bezahlen
-## 3.	Aufgabe – Bezahlmöglichkeiten
-- Kontozahlung (Nach Verifikation wird direkt vom Konto abgezogen)
-- Rechnung (bis zu 5 Bestellungen auf Rechnung summierbar)
+Die zu diesem Programm dazugehörige aufgabe ist in OneDrive von Shawn Keller im ordner Gruppenarbeiten zu finden.
 
