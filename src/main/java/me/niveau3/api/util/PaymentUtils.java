@@ -24,11 +24,12 @@ public class PaymentUtils {
 
         System.out.println("Du willst " + amount + " mit deinem Bankkonto Bezahlen.");
 
+
         //<editor-fold desc="Account bekommen">
         Account account;
         if (mainService.getBankService().getLoggedInAccount() == null) {
             //<editor-fold desc="Nicht angemeldet">
-            System.out.println("Wenn sie sich Anmelden werden alle einträge vom öffentlichen Warenkorb in ihr eigener verschoben.");
+            System.out.println("Wenn sie sich Anmelden werden alle einträge vom öffentlichen Warenkorb in ihren persönlichen verschoben.");
             account = mainService.getBankService().login();
 
             if (account == null) {

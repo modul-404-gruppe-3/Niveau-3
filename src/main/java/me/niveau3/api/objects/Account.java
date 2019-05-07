@@ -28,7 +28,7 @@ public class Account implements Serializable {
      * @param amount the amount to be added to the Account.
      */
     public void addMoney(double amount){
-        if (amount < 1) {
+        if (amount <= 0 ) {
             throw new IllegalStateException(amount + " ist keine gültiger Wert, die zahl muss grösser als 0 sein!");
         }
         this.balance += amount;
@@ -40,7 +40,7 @@ public class Account implements Serializable {
      * @param amount the amount to be removed from the Account.
      */
     public void takeMoney(double amount){
-        if (amount < 1) {
+        if (amount <= 0) {
             throw new IllegalStateException(amount + " ist keine gültiger Wert, die zahl muss grösser als 0 sein!");
         }
         this.balance -= amount;

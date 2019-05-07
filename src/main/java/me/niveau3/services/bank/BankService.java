@@ -116,10 +116,10 @@ public class BankService extends AbstractRunContinously {
     public Account login() {
         //<editor-fold desc="GetAccountName">
         System.out.println("Bitte geben sie den Namen ihres Accounts an.");
-        String[] strings = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
+        String[] names = mainService.getAccountManager().getAccountNames().toArray(new String[0]);
         String accName = getScanner().next(
                 "Bitte geben einen Account an der existiert und genug geld auf dem Konto hat."
-                , strings);
+                , names);
 
         if (accName == null) {
             System.out.println("Zahlung mit Karte abgebrochen.");

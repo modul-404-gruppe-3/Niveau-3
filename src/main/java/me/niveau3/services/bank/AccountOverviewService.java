@@ -89,7 +89,9 @@ public class AccountOverviewService extends AbstractRunContinously {
                 break;
             //</editor-fold>
             case "5":
-                CollectiveBill.getInstance().pay();
+                if (!CollectiveBill.getInstance().pay()) {
+                    System.out.println("Zahlung nicht erfolgreich da keine Items auf ihrer rechung sind.");
+                }
                 break;
             case "6":
                 mainService.getBankService().setLoggedInAccount(null);

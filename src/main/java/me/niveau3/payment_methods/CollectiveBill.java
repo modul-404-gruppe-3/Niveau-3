@@ -7,6 +7,8 @@ import me.niveau3.api.objects.ShoppingCart;
 import me.niveau3.services.MainService;
 import me.niveau3.api.util.PaymentUtils;
 
+import java.util.List;
+
 /**
  * the method that allows payment on account payment.
  */
@@ -43,6 +45,14 @@ public class CollectiveBill extends AbstractPaymentMethod {
 
     @Override
     public boolean pay() {
-        return PaymentUtils.payItems(getMainService(), getBill().getItems());
+        List<ShoppingCart.ShoppingCartItem> items = getBill().getItems();
+
+        if (items.size() == 0) {
+            return false;
+        }
+
+        boolean b = PaymentUtils.payItems(getMainService(), items);
+       System.out.println(getBill().getItems().size());
+        return b;
     }
 }
