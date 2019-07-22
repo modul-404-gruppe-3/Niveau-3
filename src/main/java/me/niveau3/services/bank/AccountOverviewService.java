@@ -20,7 +20,7 @@ public class AccountOverviewService extends AbstractRunContinously {
     public void execute() {
         //<editor-fold desc="Überprüfen ob einloggen notwenig ist">
         Account account;
-        if (mainService.getBankService().getLoggedInAccount() == null) {
+        if (mainService.getBankService().getLoggedInAccount() == null)s {
             account = mainService.getBankService().login();
         }else {
             account = mainService.getBankService().getLoggedInAccount();
@@ -35,7 +35,7 @@ public class AccountOverviewService extends AbstractRunContinously {
         //<editor-fold desc="nächste Aktion auswählen">
         System.out.println("hallo " + account.getName());
         System.out.println("bitte gebe ein, was du machen willst:");
-        System.out.println("[1] Abheben");a
+        System.out.println("[1] Abheben");
         System.out.println("[2] Hinzufügen");
         System.out.println("[3] Bilanz anzeigen");
         System.out.println("[4] Geld überweisen");
