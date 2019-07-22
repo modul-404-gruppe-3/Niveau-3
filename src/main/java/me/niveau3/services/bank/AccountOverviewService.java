@@ -20,7 +20,7 @@ public class AccountOverviewService extends AbstractRunContinously {
     public void execute() {
         //<editor-fold desc="Überprüfen ob einloggen notwenig ist">
         Account account;
-        if (mainService.getBankService().getLoggedInAccount() == null)s {
+        if (mainService.getBankService().getLoggedInAccount() == null) {
             account = mainService.getBankService().login();
         }else {
             account = mainService.getBankService().getLoggedInAccount();
