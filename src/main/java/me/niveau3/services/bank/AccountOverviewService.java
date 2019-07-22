@@ -35,7 +35,7 @@ public class AccountOverviewService extends AbstractRunContinously {
         //<editor-fold desc="nächste Aktion auswählen">
         System.out.println("hallo " + account.getName());
         System.out.println("bitte gebe ein, was du machen willst:");
-        System.out.println("[1] Abheben");a
+        System.out.println("[1] Abheben");
         System.out.println("[2] Hinzufügen");
         System.out.println("[3] Bilanz anzeigen");
         System.out.println("[4] Geld überweisen");
